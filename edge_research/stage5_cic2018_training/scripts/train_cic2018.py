@@ -376,6 +376,46 @@ logger.info(f"Train set scaled shape: {X_train_scaled.shape}, encoded labels: {n
 logger.info(f"Val set scaled shape: {X_val_scaled.shape}, encoded labels: {np.bincount(y_val)}")
 logger.info(f"Label encoder target classes: {le.classes_}")
 
+# 4.5. Realistic PortScan Injection (from 2017 Dataset)
+# Discard dummy PortScan samples (label 3) if any exist in the loaded/cached dataset
+train_non_dummy_mask = (y_train != 3)
+X_train_scaled = X_train_scaled[train_non_dummy_mask]
+y_train = y_train[train_non_dummy_mask]
+
+val_non_dummy_mask = (y_val != 3)
+X_val_scaled = X_val_scaled[val_non_dummy_mask]
+y_val = y_val[val_non_dummy_mask]
+
+logger.info(f"Removed dummy PortScan rows. Train shape: {X_train_scaled.shape}, Val shape: {X_val_scaled.shape}")
+
+# Load realistic PortScan samples from 2017 dataset
+logger.info("Injecting 10,000 real PortScan samples from CICIDS2017 dataset...")
+data_2017_path = "/Users/harshgoyal/Documents/BTP/BTP/ai-soc/data/processed/cicids2017_processed.npz"
+data_2017 = np.load(data_2017_path)
+X_train_2017 = data_2017['X_train']
+y_train_2017 = data_2017['y_train']
+
+# Extract real PortScan samples (label index is 3)
+portscan_indices = np.where(y_train_2017 == 3)[0]
+np.random.seed(42)
+selected_indices = np.random.choice(portscan_indices, size=10000, replace=False)
+X_portscan = X_train_2017[selected_indices]
+y_portscan = y_train_2017[selected_indices]
+
+# Split 80/20 into train/val
+X_ps_train, X_ps_val, y_ps_train, y_ps_val = train_test_split(
+    X_portscan, y_portscan, test_size=0.2, random_state=42, stratify=y_portscan
+)
+
+# Concatenate with the main datasets
+X_train_scaled = np.vstack([X_train_scaled, X_ps_train])
+y_train = np.concatenate([y_train, y_ps_train])
+X_val_scaled = np.vstack([X_val_scaled, X_ps_val])
+y_val = np.concatenate([y_val, y_ps_val])
+
+logger.info(f"After PortScan injection - Train shape: {X_train_scaled.shape}, bincount: {np.bincount(y_train)}")
+logger.info(f"After PortScan injection - Val shape: {X_val_scaled.shape}, bincount: {np.bincount(y_val)}")
+
 # 5. Define PyTorch MLP Architecture
 class MLPClassifierNet(nn.Module):
     def __init__(self, input_dim=80, num_classes=4):
@@ -476,7 +516,7 @@ def evaluate_model(name, model_obj, X_test, y_test, is_pytorch=False, device='cp
 # 7. Training Execution
 # A. LOGISTIC REGRESSION
 logger.info("\n=== Training Logistic Regression ===")
-lr = LogisticRegression(max_iter=1000, random_state=42, C=1.0)
+lr = LogisticRegression(max_iter=1000, random_state=42, C=1.0, class_weight='balanced')
 mem_tracker = MemoryTracker()
 mem_tracker.start()
 start_time = time.time()
@@ -506,7 +546,7 @@ trained_models["Logistic Regression"] = (lr, evals)
 
 # B. RANDOM FOREST
 logger.info("\n=== Training Random Forest ===")
-rf = RandomForestClassifier(n_estimators=100, max_depth=12, n_jobs=-1, random_state=42)
+rf = RandomForestClassifier(n_estimators=100, max_depth=12, n_jobs=-1, random_state=42, class_weight='balanced')
 mem_tracker = MemoryTracker()
 mem_tracker.start()
 start_time = time.time()
@@ -536,7 +576,7 @@ trained_models["Random Forest"] = (rf, evals)
 
 # C. EXTRA TREES
 logger.info("\n=== Training Extra Trees ===")
-et = ExtraTreesClassifier(n_estimators=100, max_depth=12, n_jobs=-1, random_state=42)
+et = ExtraTreesClassifier(n_estimators=100, max_depth=12, n_jobs=-1, random_state=42, class_weight='balanced')
 mem_tracker = MemoryTracker()
 mem_tracker.start()
 start_time = time.time()
@@ -578,7 +618,9 @@ xgb_clf = xgb.XGBClassifier(
 mem_tracker = MemoryTracker()
 mem_tracker.start()
 start_time = time.time()
-xgb_clf.fit(X_train_scaled, y_train)
+from sklearn.utils.class_weight import compute_sample_weight
+sample_weights = compute_sample_weight(class_weight='balanced', y=y_train)
+xgb_clf.fit(X_train_scaled, y_train, sample_weight=sample_weights)
 end_time = time.time()
 peak_ram = mem_tracker.stop()
 train_time = end_time - start_time
@@ -610,7 +652,8 @@ lgb_clf = lgb.LGBMClassifier(
     learning_rate=0.1,
     n_jobs=1,
     random_state=42,
-    verbose=-1
+    verbose=-1,
+    class_weight='balanced'
 )
 mem_tracker = MemoryTracker()
 mem_tracker.start()
@@ -645,8 +688,15 @@ device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 logger.info(f"Apple Silicon MPS Acceleration Status: {'ENABLED' if device.type == 'mps' else 'DISABLED (Falling back to CPU)'}")
 
 mlp = MLPClassifierNet(input_dim=80, num_classes=4).to(device)
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(mlp.parameters(), lr=0.005)
+
+# Compute class weights for cost-sensitive learning
+from sklearn.utils.class_weight import compute_class_weight
+class_weights_val = compute_class_weight(class_weight='balanced', classes=np.unique(y_train), y=y_train)
+class_weights = torch.tensor(class_weights_val, dtype=torch.float32).to(device)
+criterion = nn.CrossEntropyLoss(weight=class_weights)
+
+optimizer = optim.Adam(mlp.parameters(), lr=0.002)
+scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=30)
 
 # Convert to Tensor Datasets (float32 throughout, pin_memory=False, num_workers=0)
 train_dataset = TensorDataset(
@@ -659,9 +709,9 @@ mem_tracker = MemoryTracker()
 mem_tracker.start()
 start_time = time.time()
 
-# Train loops (15 epochs)
+# Train loops (30 epochs)
 mlp.train()
-for epoch in range(15):
+for epoch in range(30):
     epoch_loss = 0.0
     for batch_x, batch_y in train_loader:
         batch_x, batch_y = batch_x.to(device), batch_y.to(device)
@@ -672,8 +722,9 @@ for epoch in range(15):
         optimizer.step()
         epoch_loss += loss.item() * batch_x.size(0)
     epoch_loss /= len(train_dataset)
-    if (epoch + 1) % 3 == 0 or epoch == 0:
-        logger.info(f"  Epoch {epoch+1}/15 - Loss: {epoch_loss:.4f}")
+    scheduler.step()
+    if (epoch + 1) % 5 == 0 or epoch == 0:
+        logger.info(f"  Epoch {epoch+1}/30 - Loss: {epoch_loss:.4f}")
 
 end_time = time.time()
 peak_ram = mem_tracker.stop()
