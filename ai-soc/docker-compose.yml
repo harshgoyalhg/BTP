@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: ai_soc_postgres
+    environment:
+      POSTGRES_USER: soc_admin
+      POSTGRES_PASSWORD: securepassword123
+      POSTGRES_DB: soc_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # This maps our local schema.sql to the container's init folder.
+      # It will be executed automatically when the container starts for the first time.
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

@@ -1,0 +1,21 @@
+# Ignore raw datasets
+dataset/
+
+# Ignore Python caches & virtual envs
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# Ignore macOS metadata
+.DS_Store
+
+# Ignore large ML binary artifacts (datasets and model parameters)
+*.npz
+*.pkl
+*.pt
+
+# Ignore local execution logs
+**/logs/*.log
