@@ -240,9 +240,12 @@ def evaluate_ensemble(X, y, dataset_label, active_classes=None):
             pass
     pr_auc = np.mean(pr_list) if pr_list else np.nan
 
-    logger.info(f"  Acc={acc:.4f} | MCC={mcc:.4f} | Macro-F1={mac_f1:.4f} "
-                f"| ROC-AUC={roc_auc:.4f if not np.isnan(roc_auc) else 'N/A'} "
-                f"| Inf={inf_time:.3f}s")
+    roc_str = f"{roc_auc:.4f}" if not np.isnan(roc_auc) else "N/A"
+    pr_str = f"{pr_auc:.4f}" if not np.isnan(pr_auc) else "N/A"
+    strategy = 'Soft Voting'
+    logger.info(f"  Ensemble ({strategy}): Acc={acc:.4f} | Wt-F1={wt_f1:.4f} "
+                f"| Macro-F1={mac_f1:.4f} | MCC={mcc:.4f} | Inf={inf_time:.3f}s "
+                f"| ROC-AUC={roc_str} | PR-AUC={pr_str}")
 
     return {
         'Dataset': dataset_label,

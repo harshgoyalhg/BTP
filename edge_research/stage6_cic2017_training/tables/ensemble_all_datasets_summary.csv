@@ -1,0 +1,4 @@
+Dataset,Ensemble Members,Strategy,Accuracy,Precision (Weighted),Recall (Weighted),Macro F1,Weighted F1,Balanced Accuracy,MCC,ROC-AUC,PR-AUC,Inference Time (s),N Samples
+CIC2017 Validation (Own Dataset),ET + RF + LightGBM + MLP,Soft Voting (equal weights),99.918,99.918,99.918,99.8304,99.9179,99.7587,99.8431,99.999,99.9891,1.4501,100000
+CICIDS2018 Cross-Dataset,ET + RF + LightGBM + MLP,Soft Voting (equal weights),16.8716,65.1311,16.8716,33.8011,14.7383,52.4575,17.4261,86.7261,78.0853,1.1938,102000
+LycoS-Unicas-IDS2018 External,ET + RF + LightGBM + MLP,Soft Voting (equal weights),52.0756,61.0197,52.0756,22.9597,35.7836,33.3894,2.2017,N/A,65.859,2.1076,192286

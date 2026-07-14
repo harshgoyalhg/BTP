@@ -320,10 +320,16 @@ def add_engineered_features(X_scaled: np.ndarray, is_train: bool = True) -> np.n
     if is_train:
         engineered_scaler = StandardScaler()
         new_feats_scaled = engineered_scaler.fit_transform(new_feats)
-        joblib.dump(engineered_scaler, os.path.join(ARTIFACT_DIR, "engineered_scaler.pkl"))
-        logger.info("Fitted and saved engineered_scaler.pkl")
+        joblib.dump(engineered_scaler, os.path.join(ARTIFACT_DIR, "engineered_scaler_robust.pkl"))
+        logger.info("Fitted and saved engineered_scaler_robust.pkl")
     else:
         new_feats_scaled = engineered_scaler.transform(new_feats)
+
+    # ── ROBUST FEATURE DROPPING ──
+    # 0: Source Port, 1: Destination Port, 3: Flow Duration
+    X_scaled[:, 0] = 0.0
+    X_scaled[:, 1] = 0.0
+    X_scaled[:, 3] = 0.0
 
     return np.column_stack([X_scaled, new_feats_scaled]).astype(np.float32)
 
@@ -437,7 +443,7 @@ mt = MemoryTracker(); mt.start(); t0 = time.time()
 lr_model.fit(X_train_scaled, y_train)
 train_time = time.time() - t0; peak_ram = mt.stop()
 logger.info(f"LR done in {train_time:.2f}s | Peak RAM: {peak_ram:.2f} MB")
-mp = os.path.join(MODEL_DIR, "logistic_regression.pkl")
+mp = os.path.join(MODEL_DIR, "logistic_regression_robust.pkl")
 joblib.dump(lr_model, mp)
 evals = evaluate_model("Logistic Regression", lr_model, X_val_scaled, y_val)
 results_metrics.append({"Model": "Logistic Regression", "Train Time (s)": train_time,
@@ -447,23 +453,6 @@ results_metrics.append({"Model": "Logistic Regression", "Train Time (s)": train_
 trained_models["Logistic Regression"] = (lr_model, evals)
 
 
-# ── B. Random Forest ──────────────────────────────────────────────────────────
-logger.info("\n=== Training Random Forest ===")
-rf_model = RandomForestClassifier(**HP['random_forest'])
-mt = MemoryTracker(); mt.start(); t0 = time.time()
-rf_model.fit(X_train_scaled, y_train)
-train_time = time.time() - t0; peak_ram = mt.stop()
-logger.info(f"RF done in {train_time:.2f}s | Peak RAM: {peak_ram:.2f} MB")
-mp = os.path.join(MODEL_DIR, "random_forest.pkl")
-joblib.dump(rf_model, mp)
-evals = evaluate_model("Random Forest", rf_model, X_val_scaled, y_val)
-results_metrics.append({"Model": "Random Forest", "Train Time (s)": train_time,
-    "Inference Time (s)": evals["Inference Time"], "Peak RAM (MB)": peak_ram,
-    "Model Size (MB)": os.path.getsize(mp)/(1024*1024),
-    **{k: v for k, v in evals.items() if k not in ["CM","probs","preds","Inference Time"]}})
-trained_models["Random Forest"] = (rf_model, evals)
-
-
 # ── C. Extra Trees ────────────────────────────────────────────────────────────
 logger.info("\n=== Training Extra Trees ===")
 et_model = ExtraTreesClassifier(**HP['extra_trees'])
@@ -471,7 +460,7 @@ mt = MemoryTracker(); mt.start(); t0 = time.time()
 et_model.fit(X_train_scaled, y_train)
 train_time = time.time() - t0; peak_ram = mt.stop()
 logger.info(f"ET done in {train_time:.2f}s | Peak RAM: {peak_ram:.2f} MB")
-mp = os.path.join(MODEL_DIR, "extra_trees.pkl")
+mp = os.path.join(MODEL_DIR, "extra_trees_robust.pkl")
 joblib.dump(et_model, mp)
 evals = evaluate_model("Extra Trees", et_model, X_val_scaled, y_val)
 results_metrics.append({"Model": "Extra Trees", "Train Time (s)": train_time,
@@ -481,23 +470,6 @@ results_metrics.append({"Model": "Extra Trees", "Train Time (s)": train_time,
 trained_models["Extra Trees"] = (et_model, evals)
 
 
-# ── D. XGBoost ────────────────────────────────────────────────────────────────
-logger.info("\n=== Training XGBoost ===")
-xgb_model = xgb.XGBClassifier(**HP['xgboost'])
-mt = MemoryTracker(); mt.start(); t0 = time.time()
-xgb_model.fit(X_train_scaled, y_train)
-train_time = time.time() - t0; peak_ram = mt.stop()
-logger.info(f"XGB done in {train_time:.2f}s | Peak RAM: {peak_ram:.2f} MB")
-mp = os.path.join(MODEL_DIR, "xgboost.pkl")
-joblib.dump(xgb_model, mp)
-evals = evaluate_model("XGBoost", xgb_model, X_val_scaled, y_val)
-results_metrics.append({"Model": "XGBoost", "Train Time (s)": train_time,
-    "Inference Time (s)": evals["Inference Time"], "Peak RAM (MB)": peak_ram,
-    "Model Size (MB)": os.path.getsize(mp)/(1024*1024),
-    **{k: v for k, v in evals.items() if k not in ["CM","probs","preds","Inference Time"]}})
-trained_models["XGBoost"] = (xgb_model, evals)
-
-
 # ── E. LightGBM ───────────────────────────────────────────────────────────────
 logger.info("\n=== Training LightGBM ===")
 lgb_model = lgb.LGBMClassifier(**HP['lightgbm'])
@@ -505,7 +477,7 @@ mt = MemoryTracker(); mt.start(); t0 = time.time()
 lgb_model.fit(X_train_scaled, y_train)
 train_time = time.time() - t0; peak_ram = mt.stop()
 logger.info(f"LGBM done in {train_time:.2f}s | Peak RAM: {peak_ram:.2f} MB")
-mp = os.path.join(MODEL_DIR, "lightgbm.pkl")
+mp = os.path.join(MODEL_DIR, "lightgbm_robust.pkl")
 joblib.dump(lgb_model, mp)
 evals = evaluate_model("LightGBM", lgb_model, X_val_scaled, y_val)
 results_metrics.append({"Model": "LightGBM", "Train Time (s)": train_time,
@@ -514,76 +486,6 @@ results_metrics.append({"Model": "LightGBM", "Train Time (s)": train_time,
     **{k: v for k, v in evals.items() if k not in ["CM","probs","preds","Inference Time"]}})
 trained_models["LightGBM"] = (lgb_model, evals)
 
-
-# ── F. MLP (PyTorch) ──────────────────────────────────────────────────────────
-logger.info("\n=== Training MLP (PyTorch) ===")
-device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
-logger.info(f"Using device: {device}")
-
-mlp_hp  = HP['mlp']
-mlp_net = MLPClassifierNet(input_dim=X_train_scaled.shape[1], num_classes=NUM_CLASSES).to(device)
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(mlp_net.parameters(), lr=mlp_hp['lr'])
-scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=mlp_hp['T_max'])
-
-train_ds = TensorDataset(
-    torch.tensor(X_train_scaled, dtype=torch.float32),
-    torch.tensor(y_train, dtype=torch.int64)
-)
-train_loader = DataLoader(train_ds, batch_size=mlp_hp['batch_size'],
-                          shuffle=True, num_workers=0, pin_memory=False)
-
-mt = MemoryTracker(); mt.start(); t0 = time.time()
-mlp_net.train()
-for epoch in range(mlp_hp['epochs']):
-    epoch_loss = 0.0
-    for bx, by in train_loader:
-        bx, by = bx.to(device), by.to(device)
-        optimizer.zero_grad()
-        loss = criterion(mlp_net(bx), by)
-        loss.backward()
-        optimizer.step()
-        epoch_loss += loss.item() * bx.size(0)
-    epoch_loss /= len(train_ds)
-    scheduler.step()
-    if (epoch + 1) % 5 == 0 or epoch == 0:
-        logger.info(f"  Epoch {epoch+1:02d}/{mlp_hp['epochs']} — Loss: {epoch_loss:.4f}")
-
-train_time = time.time() - t0; peak_ram = mt.stop()
-logger.info(f"MLP done in {train_time:.2f}s | Peak RAM: {peak_ram:.2f} MB")
-
-mp = os.path.join(MODEL_DIR, "mlp.pt")
-torch.save(mlp_net.state_dict(), mp)
-evals = evaluate_model("MLP (PyTorch)", mlp_net, X_val_scaled, y_val,
-                        is_pytorch=True, device=device)
-results_metrics.append({"Model": "MLP (PyTorch)", "Train Time (s)": train_time,
-    "Inference Time (s)": evals["Inference Time"], "Peak RAM (MB)": peak_ram,
-    "Model Size (MB)": os.path.getsize(mp)/(1024*1024),
-    **{k: v for k, v in evals.items() if k not in ["CM","probs","preds","Inference Time"]}})
-trained_models["MLP (PyTorch)"] = (mlp_net, evals)
-
-
-# ── G. SVM (Linear) ───────────────────────────────────────────────────────────
-# Note: LinearSVC scales well to large datasets (primal solver, no kernel matrix)
-# Training on the FULL training set (no subsampling) as requested.
-logger.info("\n=== Training SVM (Linear) — Full Training Set ===")
-X_svm_lin = X_train_scaled
-y_svm_lin = y_train
-logger.info(f"SVM (Linear) training on {len(X_svm_lin):,} samples (full set)")
-
-svm_lin = LinearSVC(**HP['svm_linear'])
-mt = MemoryTracker(); mt.start(); t0 = time.time()
-svm_lin.fit(X_svm_lin, y_svm_lin)
-train_time = time.time() - t0; peak_ram = mt.stop()
-logger.info(f"SVM-Lin done in {train_time:.2f}s | Peak RAM: {peak_ram:.2f} MB")
-mp = os.path.join(MODEL_DIR, "svm_linear.pkl")
-joblib.dump(svm_lin, mp)
-evals = evaluate_model("SVM (Linear)", svm_lin, X_val_scaled, y_val)
-results_metrics.append({"Model": "SVM (Linear)", "Train Time (s)": train_time,
-    "Inference Time (s)": evals["Inference Time"], "Peak RAM (MB)": peak_ram,
-    "Model Size (MB)": os.path.getsize(mp)/(1024*1024),
-    **{k: v for k, v in evals.items() if k not in ["CM","probs","preds","Inference Time"]}})
-trained_models["SVM (Linear)"] = (svm_lin, evals)
 
 
 

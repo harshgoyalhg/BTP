@@ -1,0 +1,2 @@
+Dataset,Ensemble Members,Strategy,Accuracy,Precision (Weighted),Recall (Weighted),Macro F1,Weighted F1,Balanced Accuracy,MCC,ROC-AUC,PR-AUC,Inference Time (s),N Samples
+CIC2017 Validation (Own Dataset),ET + RF + LightGBM + MLP,Soft Voting (equal weights),99.918,99.918,99.918,99.8304,99.9179,99.7587,99.8431,99.999,99.9891,1.4501,100000

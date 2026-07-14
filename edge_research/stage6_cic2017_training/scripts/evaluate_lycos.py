@@ -195,7 +195,6 @@ models_to_eval = [
     ("LightGBM",            "lightgbm.pkl",            False),
     ("MLP (PyTorch)",       "mlp.pt",                  True),
     ("SVM (Linear)",        "svm_linear.pkl",          False),
-    ("SVM (RBF Kernel)",    "svm_rbf.pkl",             False),
 ]
 
 for name, fname, is_pt in models_to_eval:

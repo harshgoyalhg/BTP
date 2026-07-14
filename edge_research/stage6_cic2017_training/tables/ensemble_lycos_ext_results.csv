@@ -1,0 +1,2 @@
+Dataset,Ensemble Members,Strategy,Accuracy,Precision (Weighted),Recall (Weighted),Macro F1,Weighted F1,Balanced Accuracy,MCC,ROC-AUC,PR-AUC,Inference Time (s),N Samples
+LycoS-Unicas-IDS2018 External,ET + RF + LightGBM + MLP,Soft Voting (equal weights),52.0756,61.0197,52.0756,22.9597,35.7836,33.3894,2.2017,N/A,65.859,2.1076,192286

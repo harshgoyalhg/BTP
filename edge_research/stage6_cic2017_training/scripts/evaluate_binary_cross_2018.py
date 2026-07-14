@@ -156,46 +156,49 @@ def evaluate_model(name: str, model_obj, X_eval: np.ndarray, y_eval: np.ndarray,
                 ed = np.exp(dec - np.max(dec, axis=1, keepdims=True))
                 probs = ed / ed.sum(axis=1, keepdims=True)
 
+    # Convert to Binary: 0 = Benign, 1 = Attack (classes 1, 2, 3)
+    y_eval_bin = (y_eval != 0).astype(int)
+    y_pred_bin = (y_pred != 0).astype(int)
+    
+    # Probability of Attack is 1.0 - Probability(Benign)
+    probs_bin = 1.0 - probs[:, 0]
+
     inf_time = time.time() - t0
 
-    acc      = accuracy_score(y_eval, y_pred)
-    prec     = precision_score(y_eval, y_pred, average='weighted', zero_division=0)
-    rec      = recall_score(y_eval, y_pred, average='weighted', zero_division=0)
-    macro_f1 = f1_score(y_eval, y_pred, average='macro', zero_division=0)
-    wt_f1    = f1_score(y_eval, y_pred, average='weighted', zero_division=0)
-    bal_acc  = balanced_accuracy_score(y_eval, y_pred)
-    mcc      = matthews_corrcoef(y_eval, y_pred)
+    acc      = accuracy_score(y_eval_bin, y_pred_bin)
+    prec     = precision_score(y_eval_bin, y_pred_bin, zero_division=0)
+    rec      = recall_score(y_eval_bin, y_pred_bin, zero_division=0)
+    macro_f1 = f1_score(y_eval_bin, y_pred_bin, zero_division=0) # Binary F1
+    wt_f1    = f1_score(y_eval_bin, y_pred_bin, average='weighted', zero_division=0)
+    bal_acc  = balanced_accuracy_score(y_eval_bin, y_pred_bin)
+    mcc      = matthews_corrcoef(y_eval_bin, y_pred_bin)
 
     try:
-        roc_auc = roc_auc_score(y_eval, probs, multi_class='ovr', average='macro')
+        roc_auc = roc_auc_score(y_eval_bin, probs_bin)
     except Exception as e:
         logger.warning(f"ROC-AUC failed for {name}: {e}")
         roc_auc = np.nan
 
     try:
-        pr_list = []
-        for i in range(NUM_CLASSES):
-            yb = (y_eval == i).astype(int)
-            pv, rv, _ = precision_recall_curve(yb, probs[:, i])
-            pr_list.append(auc(rv, pv))
-        pr_auc = np.mean(pr_list)
+        pv, rv, _ = precision_recall_curve(y_eval_bin, probs_bin)
+        pr_auc = auc(rv, pv)
     except Exception as e:
         logger.warning(f"PR-AUC failed for {name}: {e}")
         pr_auc = np.nan
 
-    logger.info(f"  {name}: Acc={acc:.4f} | Wt-F1={wt_f1:.4f} | Macro-F1={macro_f1:.4f} "
-                f"| MCC={mcc:.4f} | Inf={inf_time:.3f}s")
+    logger.info(f"  {name} (Binary): Acc={acc:.4f} | F1={macro_f1:.4f} "
+                f"| ROC-AUC={roc_auc:.4f} | Inf={inf_time:.3f}s")
 
     # Confusion matrix
-    cm = confusion_matrix(y_eval, y_pred)
+    cm = confusion_matrix(y_eval_bin, y_pred_bin)
     plt.figure(figsize=(6, 5))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Oranges',
-                xticklabels=CLASSES, yticklabels=CLASSES)
-    plt.title(f"Cross-Dataset Confusion Matrix — {name}\n(Train: CIC2017 → Test: CIC2018)")
+                xticklabels=['Benign', 'Attack'], yticklabels=['Benign', 'Attack'])
+    plt.title(f"Binary Cross-Dataset Confusion Matrix — {name}\n(Train: CIC2017 → Test: CIC2018)")
     plt.ylabel('Actual (CIC2018)'); plt.xlabel('Predicted')
     plt.tight_layout()
     plt.savefig(os.path.join(CROSS_FIG_DIR,
-                             f"confusion_matrix_{name.lower().replace(' ','_')}.png"), dpi=300)
+                             f"binary_confusion_matrix_{name.lower().replace(' ','_')}.png"), dpi=300)
     plt.close()
 
     return {"Accuracy": acc, "Precision": prec, "Recall": rec,
@@ -203,7 +206,7 @@ def evaluate_model(name: str, model_obj, X_eval: np.ndarray, y_eval: np.ndarray,
             "Balanced Accuracy": bal_acc, "MCC": mcc,
             "ROC-AUC": roc_auc, "PR-AUC": pr_auc,
             "Inference Time (s)": inf_time,
-            "probs": probs, "preds": y_pred}
+            "probs": probs_bin, "preds": y_pred_bin}
 
 # ── 5. Load & Run Models ──────────────────────────────────────────────────────
 models_to_eval = [
@@ -240,71 +243,61 @@ for name, fname, is_pt in models_to_eval:
 
 # ── 6. Save Tables ────────────────────────────────────────────────────────────
 df_cross = pd.DataFrame(results_metrics)
-df_cross.to_csv(os.path.join(TABLE_DIR, "cross_2018_results.csv"), index=False)
-logger.info("Saved: cross_2018_results.csv")
+df_cross.to_csv(os.path.join(TABLE_DIR, "binary_cross_2018_results.csv"), index=False)
+logger.info("Saved: binary_cross_2018_results.csv")
 
 reports = []
 for mname, (_, ev) in eval_models.items():
-    pred_lbl = np.array(CLASSES)[ev["preds"]]
-    true_lbl = np.array(CLASSES)[y_val_18]
+    pred_lbl = np.array(["Benign", "Attack"])[ev["preds"]]
+    true_lbl = np.array(["Benign", "Attack"])[(y_val_18 != 0).astype(int)]
     rpt = classification_report(true_lbl, pred_lbl, output_dict=True, zero_division=0)
     for cls, m in rpt.items():
         if isinstance(m, dict):
             reports.append({"Model": mname, "Class": cls,
                             "Precision": m["precision"], "Recall": m["recall"],
                             "F1-Score": m["f1-score"], "Support": m["support"]})
-pd.DataFrame(reports).to_csv(os.path.join(TABLE_DIR, "cross_2018_classification_reports.csv"), index=False)
-logger.info("Saved: cross_2018_classification_reports.csv")
+pd.DataFrame(reports).to_csv(os.path.join(TABLE_DIR, "binary_cross_2018_classification_reports.csv"), index=False)
+logger.info("Saved: binary_cross_2018_classification_reports.csv")
 
 # ── 7. Visualizations ────────────────────────────────────────────────────────
-logger.info("Generating cross-dataset ROC and PR curves...")
+logger.info("Generating binary cross-dataset ROC and PR curves...")
 
 # ROC Curves
 plt.figure(figsize=(8, 6))
+y_val_18_bin = (y_val_18 != 0).astype(int)
 for mname, (_, ev) in eval_models.items():
-    probs = ev["probs"]
-    mean_fpr = np.linspace(0, 1, 100)
-    tprs = []
-    for i in range(NUM_CLASSES):
-        yb = (y_val_18 == i).astype(int)
-        if yb.sum() == 0:
-            continue
-        fpr_, tpr_, _ = roc_curve(yb, probs[:, i])
-        tprs.append(np.interp(mean_fpr, fpr_, tpr_))
-    mean_tpr = np.mean(tprs, axis=0)
-    mean_tpr[0] = 0.0
-    macro_auc = auc(mean_fpr, mean_tpr)
-    plt.plot(mean_fpr, mean_tpr, label=f"{mname} (AUC={macro_auc:.3f})", lw=2)
+    probs_bin = ev["probs"]
+    try:
+        fpr, tpr, _ = roc_curve(y_val_18_bin, probs_bin)
+        roc_auc = auc(fpr, tpr)
+        plt.plot(fpr, tpr, label=f"{mname} (AUC={roc_auc:.3f})", lw=2)
+    except Exception as e:
+        logger.warning(f"Could not plot ROC for {mname}: {e}")
 plt.plot([0,1],[0,1],'k--',lw=1.5)
 plt.xlim([0,1]); plt.ylim([0,1.05])
 plt.xlabel('False Positive Rate'); plt.ylabel('True Positive Rate')
-plt.title('Cross-Dataset ROC Curves\n(Train: CIC2017 → Test: CIC2018)')
+plt.title('Binary Cross-Dataset ROC Curves\n(Train: CIC2017 → Test: CIC2018)')
 plt.legend(loc="lower right"); plt.grid(True, alpha=0.3); plt.tight_layout()
-plt.savefig(os.path.join(CROSS_FIG_DIR, "roc_curve.png"), dpi=300)
+plt.savefig(os.path.join(CROSS_FIG_DIR, "binary_roc_curve.png"), dpi=300)
 plt.close()
 
 # PR Curves
 plt.figure(figsize=(8, 6))
 for mname, (_, ev) in eval_models.items():
-    probs = ev["probs"]
-    mean_rec = np.linspace(0, 1, 100)
-    prec_list = []
-    for i in range(NUM_CLASSES):
-        yb = (y_val_18 == i).astype(int)
-        if yb.sum() == 0:
-            continue
-        pv, rv, _ = precision_recall_curve(yb, probs[:, i])
-        prec_list.append(np.interp(mean_rec, rv[::-1], pv[::-1]))
-    mean_prec = np.mean(prec_list, axis=0)
-    pr_a = auc(mean_rec, mean_prec)
-    plt.plot(mean_rec, mean_prec, label=f"{mname} (PR-AUC={pr_a:.3f})", lw=2)
+    probs_bin = ev["probs"]
+    try:
+        pv, rv, _ = precision_recall_curve(y_val_18_bin, probs_bin)
+        pr_a = auc(rv, pv)
+        plt.plot(rv, pv, label=f"{mname} (PR-AUC={pr_a:.3f})", lw=2)
+    except Exception as e:
+        logger.warning(f"Could not plot PR for {mname}: {e}")
 plt.xlim([0,1]); plt.ylim([0,1.05])
 plt.xlabel('Recall'); plt.ylabel('Precision')
-plt.title('Cross-Dataset PR Curves\n(Train: CIC2017 → Test: CIC2018)')
+plt.title('Binary Cross-Dataset PR Curves\n(Train: CIC2017 → Test: CIC2018)')
 plt.legend(loc="lower left"); plt.grid(True, alpha=0.3); plt.tight_layout()
-plt.savefig(os.path.join(CROSS_FIG_DIR, "pr_curve.png"), dpi=300)
+plt.savefig(os.path.join(CROSS_FIG_DIR, "binary_pr_curve.png"), dpi=300)
 plt.close()
 
 logger.info("=" * 70)
-logger.info("Cross-Dataset Evaluation (CIC2017 → CIC2018) COMPLETE.")
+logger.info("Binary Cross-Dataset Evaluation (CIC2017 → CIC2018) COMPLETE.")
 logger.info("=" * 70)
