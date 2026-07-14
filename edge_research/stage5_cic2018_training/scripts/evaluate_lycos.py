@@ -227,7 +227,7 @@ else:
     y_clean = y_raw[clean_idx].copy()
     
     # Scale Features
-    processed_dir = "/Users/harshgoyal/Documents/BTP/BTP/ai-soc/data/processed"
+    processed_dir = os.path.join(BASE_DIR, "artifacts")
     scaler = joblib.load(os.path.join(processed_dir, "scaler.pkl"))
     le = joblib.load(os.path.join(processed_dir, "label_encoder.pkl"))
     
@@ -237,10 +237,38 @@ else:
     logger.info(f"Saving preprocessed Lycos arrays to cache...")
     np.savez_compressed(lycos_cache_path, X_test=X_test, y_test=y_test)
     logger.info(f"Final Lycos test set shape: {X_test.shape}, labels: {np.bincount(y_test)}")
+# 2.5. Feature Engineering (Unscaling, computing ratios, scaling, and appending)
+logger.info("Applying feature engineering (ratios on raw features) for Lycos test set...")
+# Load scalers
+processed_dir = os.path.join(BASE_DIR, "artifacts")
+scaler = joblib.load(os.path.join(processed_dir, "scaler.pkl"))
+engineered_scaler = joblib.load(os.path.join(processed_dir, "engineered_scaler.pkl"))
+
+# Reconstruct raw values
+X_raw = scaler.inverse_transform(X_test)
+idx_fwd_pkts = SCALER_FEATURES.index('Total Fwd Packets')
+idx_bwd_pkts = SCALER_FEATURES.index('Total Backward Packets')
+idx_fwd_len = SCALER_FEATURES.index('Total Length of Fwd Packets')
+idx_bwd_len = SCALER_FEATURES.index('Total Length of Bwd Packets')
+
+# Compute ratios
+fwd_pkts = X_raw[:, idx_fwd_pkts]
+bwd_pkts = X_raw[:, idx_bwd_pkts]
+fwd_len = X_raw[:, idx_fwd_len]
+bwd_len = X_raw[:, idx_bwd_len]
+
+pkt_ratio = fwd_pkts / (bwd_pkts + 1.0)
+len_ratio = fwd_len / (bwd_len + 1.0)
+
+new_features = np.column_stack([pkt_ratio, len_ratio])
+new_features_scaled = engineered_scaler.transform(new_features)
+
+X_test = np.column_stack([X_test, new_features_scaled])
+logger.info(f"After Feature Engineering - Lycos test set shape: {X_test.shape}")
 
 # 3. Define Neural Net Architecture
 class MLPClassifierNet(nn.Module):
-    def __init__(self, input_dim=80, num_classes=4):
+    def __init__(self, input_dim=82, num_classes=4):
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(input_dim, 128),
@@ -271,7 +299,17 @@ def evaluate_model(name, model_obj, X_eval, y_eval, is_pytorch=False, device='cp
             y_pred = np.argmax(probs, axis=1)
     else:
         y_pred = model_obj.predict(X_eval)
-        probs = model_obj.predict_proba(X_eval)
+        if hasattr(model_obj, "predict_proba"):
+            probs = model_obj.predict_proba(X_eval)
+        else:
+            # Fallback for models like LinearSVC without predict_proba
+            dec = model_obj.decision_function(X_eval)
+            if len(dec.shape) == 1:
+                probs_bin = 1 / (1 + np.exp(-dec))
+                probs = np.column_stack([1 - probs_bin, probs_bin])
+            else:
+                exp_dec = np.exp(dec - np.max(dec, axis=1, keepdims=True))
+                probs = exp_dec / np.sum(exp_dec, axis=1, keepdims=True)
         
     end_time = time.time()
     inference_time = end_time - start_time
@@ -337,6 +375,8 @@ models_list = [
     ("XGBoost", "xgboost.pkl", False),
     ("LightGBM", "lightgbm.pkl", False),
     ("MLP (PyTorch)", "mlp.pt", True),
+    ("SVM (Linear)", "svm_linear.pkl", False),
+    ("SVM (RBF Kernel)", "svm_rbf.pkl", False),
 ]
 
 for name, filename, is_pytorch in models_list:
@@ -346,7 +386,7 @@ for name, filename, is_pytorch in models_list:
         
     if is_pytorch:
         device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
-        model = MLPClassifierNet(input_dim=80, num_classes=4).to(device)
+        model = MLPClassifierNet(input_dim=X_test.shape[1], num_classes=4).to(device)
         model.load_state_dict(torch.load(model_path, map_location=device))
         evals = evaluate_model(name, model, X_test, y_test, is_pytorch=True, device=device)
         trained_models[name] = (model, evals)

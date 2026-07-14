@@ -311,7 +311,7 @@ if os.path.exists(npz_cache_path):
     y_val = cached_data['y_val']
     
     # Load label encoder to print details
-    processed_dir = "/Users/harshgoyal/Documents/BTP/BTP/ai-soc/data/processed"
+    processed_dir = os.path.join(BASE_DIR, "artifacts")
     le = joblib.load(os.path.join(processed_dir, "label_encoder.pkl"))
     
     logger.info(f"Cached Train shape: {X_train_scaled.shape}, val shape: {X_val_scaled.shape}")
@@ -355,7 +355,7 @@ else:
 
     # Load Stage 2 Scaler & Label Encoder
     logger.info("Loading preprocessing transformers from Stage 2...")
-    processed_dir = "/Users/harshgoyal/Documents/BTP/BTP/ai-soc/data/processed"
+    processed_dir = os.path.join(BASE_DIR, "artifacts")
     scaler = joblib.load(os.path.join(processed_dir, "scaler.pkl"))
     le = joblib.load(os.path.join(processed_dir, "label_encoder.pkl"))
 
@@ -390,7 +390,7 @@ logger.info(f"Removed dummy PortScan rows. Train shape: {X_train_scaled.shape}, 
 
 # Load realistic PortScan samples from 2017 dataset
 logger.info("Injecting 10,000 real PortScan samples from CICIDS2017 dataset...")
-data_2017_path = "/Users/harshgoyal/Documents/BTP/BTP/ai-soc/data/processed/cicids2017_processed.npz"
+data_2017_path = os.path.join(BASE_DIR, "artifacts", "cicids2017_processed.npz")
 data_2017 = np.load(data_2017_path)
 X_train_2017 = data_2017['X_train']
 y_train_2017 = data_2017['y_train']
@@ -415,6 +415,51 @@ y_val = np.concatenate([y_val, y_ps_val])
 
 logger.info(f"After PortScan injection - Train shape: {X_train_scaled.shape}, bincount: {np.bincount(y_train)}")
 logger.info(f"After PortScan injection - Val shape: {X_val_scaled.shape}, bincount: {np.bincount(y_val)}")
+
+# 4.6. Feature Engineering (Unscaling, computing ratios, scaling, and appending)
+logger.info("Applying feature engineering (ratios on raw features)...")
+# Load scaler to inverse transform
+processed_dir = os.path.join(BASE_DIR, "artifacts")
+scaler = joblib.load(os.path.join(processed_dir, "scaler.pkl"))
+
+def add_engineered_features(X_scaled, is_train=True):
+    global engineered_scaler
+    # Reconstruct raw values
+    X_raw = scaler.inverse_transform(X_scaled)
+    
+    # Identify indices
+    idx_fwd_pkts = SCALER_FEATURES.index('Total Fwd Packets')
+    idx_bwd_pkts = SCALER_FEATURES.index('Total Backward Packets')
+    idx_fwd_len = SCALER_FEATURES.index('Total Length of Fwd Packets')
+    idx_bwd_len = SCALER_FEATURES.index('Total Length of Bwd Packets')
+    
+    # Compute ratios
+    fwd_pkts = X_raw[:, idx_fwd_pkts]
+    bwd_pkts = X_raw[:, idx_bwd_pkts]
+    fwd_len = X_raw[:, idx_fwd_len]
+    bwd_len = X_raw[:, idx_bwd_len]
+    
+    pkt_ratio = fwd_pkts / (bwd_pkts + 1.0)
+    len_ratio = fwd_len / (bwd_len + 1.0)
+    
+    new_features = np.column_stack([pkt_ratio, len_ratio])
+    
+    # Fit/Apply scaling on the new features
+    if is_train:
+        from sklearn.preprocessing import StandardScaler
+        engineered_scaler = StandardScaler()
+        new_features_scaled = engineered_scaler.fit_transform(new_features)
+        # Save engineered scaler
+        joblib.dump(engineered_scaler, os.path.join(processed_dir, "engineered_scaler.pkl"))
+    else:
+        new_features_scaled = engineered_scaler.transform(new_features)
+        
+    return np.column_stack([X_scaled, new_features_scaled])
+
+X_train_scaled = add_engineered_features(X_train_scaled, is_train=True)
+X_val_scaled = add_engineered_features(X_val_scaled, is_train=False)
+
+logger.info(f"After Feature Engineering - Train shape: {X_train_scaled.shape}, Val shape: {X_val_scaled.shape}")
 
 # 5. Define PyTorch MLP Architecture
 class MLPClassifierNet(nn.Module):
@@ -450,7 +495,17 @@ def evaluate_model(name, model_obj, X_test, y_test, is_pytorch=False, device='cp
             y_pred = np.argmax(probs, axis=1)
     else:
         y_pred = model_obj.predict(X_test)
-        probs = model_obj.predict_proba(X_test)
+        if hasattr(model_obj, "predict_proba"):
+            probs = model_obj.predict_proba(X_test)
+        else:
+            # Fallback for models like LinearSVC without predict_proba
+            dec = model_obj.decision_function(X_test)
+            if len(dec.shape) == 1:
+                probs_bin = 1 / (1 + np.exp(-dec))
+                probs = np.column_stack([1 - probs_bin, probs_bin])
+            else:
+                exp_dec = np.exp(dec - np.max(dec, axis=1, keepdims=True))
+                probs = exp_dec / np.sum(exp_dec, axis=1, keepdims=True)
         
     end_inf = time.time()
     inference_time = end_inf - start_inf
@@ -516,7 +571,7 @@ def evaluate_model(name, model_obj, X_test, y_test, is_pytorch=False, device='cp
 # 7. Training Execution
 # A. LOGISTIC REGRESSION
 logger.info("\n=== Training Logistic Regression ===")
-lr = LogisticRegression(max_iter=1000, random_state=42, C=1.0, class_weight='balanced')
+lr = LogisticRegression(max_iter=1000, random_state=42, C=1.0, class_weight=None)
 mem_tracker = MemoryTracker()
 mem_tracker.start()
 start_time = time.time()
@@ -546,7 +601,7 @@ trained_models["Logistic Regression"] = (lr, evals)
 
 # B. RANDOM FOREST
 logger.info("\n=== Training Random Forest ===")
-rf = RandomForestClassifier(n_estimators=100, max_depth=12, n_jobs=-1, random_state=42, class_weight='balanced')
+rf = RandomForestClassifier(n_estimators=100, max_depth=12, n_jobs=-1, random_state=42, class_weight=None)
 mem_tracker = MemoryTracker()
 mem_tracker.start()
 start_time = time.time()
@@ -576,7 +631,7 @@ trained_models["Random Forest"] = (rf, evals)
 
 # C. EXTRA TREES
 logger.info("\n=== Training Extra Trees ===")
-et = ExtraTreesClassifier(n_estimators=100, max_depth=12, n_jobs=-1, random_state=42, class_weight='balanced')
+et = ExtraTreesClassifier(n_estimators=100, max_depth=12, n_jobs=-1, random_state=42, class_weight=None)
 mem_tracker = MemoryTracker()
 mem_tracker.start()
 start_time = time.time()
@@ -618,9 +673,7 @@ xgb_clf = xgb.XGBClassifier(
 mem_tracker = MemoryTracker()
 mem_tracker.start()
 start_time = time.time()
-from sklearn.utils.class_weight import compute_sample_weight
-sample_weights = compute_sample_weight(class_weight='balanced', y=y_train)
-xgb_clf.fit(X_train_scaled, y_train, sample_weight=sample_weights)
+xgb_clf.fit(X_train_scaled, y_train, sample_weight=None)
 end_time = time.time()
 peak_ram = mem_tracker.stop()
 train_time = end_time - start_time
@@ -653,7 +706,7 @@ lgb_clf = lgb.LGBMClassifier(
     n_jobs=1,
     random_state=42,
     verbose=-1,
-    class_weight='balanced'
+    class_weight=None
 )
 mem_tracker = MemoryTracker()
 mem_tracker.start()
@@ -687,13 +740,11 @@ logger.info("\n=== Training MLP (PyTorch on MPS) ===")
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 logger.info(f"Apple Silicon MPS Acceleration Status: {'ENABLED' if device.type == 'mps' else 'DISABLED (Falling back to CPU)'}")
 
-mlp = MLPClassifierNet(input_dim=80, num_classes=4).to(device)
+mlp = MLPClassifierNet(input_dim=X_train_scaled.shape[1], num_classes=4).to(device)
 
-# Compute class weights for cost-sensitive learning
-from sklearn.utils.class_weight import compute_class_weight
-class_weights_val = compute_class_weight(class_weight='balanced', classes=np.unique(y_train), y=y_train)
-class_weights = torch.tensor(class_weights_val, dtype=torch.float32).to(device)
-criterion = nn.CrossEntropyLoss(weight=class_weights)
+# Standard cross entropy without class weights for maximum overall accuracy
+class_weights = None
+criterion = nn.CrossEntropyLoss()
 
 optimizer = optim.Adam(mlp.parameters(), lr=0.002)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=30)
@@ -748,6 +799,79 @@ results_metrics.append({
 })
 trained_models["MLP (PyTorch)"] = (mlp, evals)
 
+# G. SVM (LINEAR)
+logger.info("\n=== Training SVM (Linear) ===")
+from sklearn.svm import LinearSVC
+# Train on a downsampled subset of 100,000 samples to keep training fast
+np.random.seed(42)
+svm_lin_indices = np.random.choice(len(X_train_scaled), size=min(100000, len(X_train_scaled)), replace=False)
+X_train_svm_lin = X_train_scaled[svm_lin_indices]
+y_train_svm_lin = y_train[svm_lin_indices]
+
+svm_lin = LinearSVC(C=0.1, dual=False, random_state=42, class_weight=None)
+mem_tracker = MemoryTracker()
+mem_tracker.start()
+start_time = time.time()
+svm_lin.fit(X_train_svm_lin, y_train_svm_lin)
+end_time = time.time()
+peak_ram = mem_tracker.stop()
+train_time = end_time - start_time
+logger.info(f"SVM (Linear) completed in {train_time:.2f}s. Peak RAM: {peak_ram:.2f} MB")
+
+# Save model
+model_path = os.path.join(BASE_DIR, "models", "svm_linear.pkl")
+joblib.dump(svm_lin, model_path)
+model_size = os.path.getsize(model_path) / (1024 * 1024)
+
+# Evaluate
+evals = evaluate_model("SVM (Linear)", svm_lin, X_val_scaled, y_val)
+results_metrics.append({
+    "Model": "SVM (Linear)",
+    "Train Time (s)": train_time,
+    "Inference Time (s)": evals["Inference Time"],
+    "Peak RAM (MB)": peak_ram,
+    "Model Size (MB)": model_size,
+    **{k: v for k, v in evals.items() if k not in ["CM", "probs", "preds", "Inference Time"]}
+})
+trained_models["SVM (Linear)"] = (svm_lin, evals)
+
+
+# H. SVM (RBF KERNEL)
+logger.info("\n=== Training SVM (RBF Kernel) ===")
+from sklearn.svm import SVC
+# Train on a downsampled subset of 20,000 samples to keep training fast
+np.random.seed(42)
+svm_rbf_indices = np.random.choice(len(X_train_scaled), size=min(20000, len(X_train_scaled)), replace=False)
+X_train_svm_rbf = X_train_scaled[svm_rbf_indices]
+y_train_svm_rbf = y_train[svm_rbf_indices]
+
+svm_rbf = SVC(C=1.0, kernel='rbf', probability=True, random_state=42, class_weight=None)
+mem_tracker = MemoryTracker()
+mem_tracker.start()
+start_time = time.time()
+svm_rbf.fit(X_train_svm_rbf, y_train_svm_rbf)
+end_time = time.time()
+peak_ram = mem_tracker.stop()
+train_time = end_time - start_time
+logger.info(f"SVM (RBF Kernel) completed in {train_time:.2f}s. Peak RAM: {peak_ram:.2f} MB")
+
+# Save model
+model_path = os.path.join(BASE_DIR, "models", "svm_rbf.pkl")
+joblib.dump(svm_rbf, model_path)
+model_size = os.path.getsize(model_path) / (1024 * 1024)
+
+# Evaluate
+evals = evaluate_model("SVM (RBF Kernel)", svm_rbf, X_val_scaled, y_val)
+results_metrics.append({
+    "Model": "SVM (RBF Kernel)",
+    "Train Time (s)": train_time,
+    "Inference Time (s)": evals["Inference Time"],
+    "Peak RAM (MB)": peak_ram,
+    "Model Size (MB)": model_size,
+    **{k: v for k, v in evals.items() if k not in ["CM", "probs", "preds", "Inference Time"]}
+})
+trained_models["SVM (RBF Kernel)"] = (svm_rbf, evals)
+
 
 # 8. Generate Tables & Reports
 logger.info("\n=== Compiling Results Tables ===")
@@ -778,7 +902,7 @@ for model_name, (_, evals) in trained_models.items():
 pd.DataFrame(reports).to_csv(os.path.join(BASE_DIR, "tables", "classification_reports.csv"), index=False)
 
 # Feature importance computation
-feature_importances = {"Feature": SCALER_FEATURES}
+feature_importances = {"Feature": SCALER_FEATURES + ['Fwd/Bwd Packet Ratio', 'Fwd/Bwd Length Ratio']}
 for model_name, (model_obj, _) in trained_models.items():
     if hasattr(model_obj, "feature_importances_"):
         feature_importances[model_name] = model_obj.feature_importances_

@@ -1,0 +1,2 @@
+Dataset,Ensemble Members,Strategy,Accuracy,Precision (Weighted),Recall (Weighted),Macro F1,Weighted F1,Balanced Accuracy,MCC,ROC-AUC,PR-AUC,Inference Time (s),N Samples
+CICIDS2017 Cross-Dataset,ET + RF + LightGBM + MLP,Soft Voting (equal weights),41.6845,65.6764,41.6845,23.2093,38.6484,33.1044,28.2645,86.4811,61.3723,1.3616,140544
