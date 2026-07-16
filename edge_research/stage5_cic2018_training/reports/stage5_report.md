@@ -133,3 +133,14 @@ All visual plots and CSV metrics databases have been structured and saved in the
 * **Confusion Matrices:** Saved in [figures/](file:///Users/harshgoyal/Documents/BTP/BTP/edge_research/stage5_cic2018_training/figures)
 * **Cross-Dataset Figures:** Available at [figures/cross_dataset/](file:///Users/harshgoyal/Documents/BTP/BTP/edge_research/stage5_cic2018_training/figures/cross_dataset)
 * **Metrics Comparison Databases:** Available in [tables/](file:///Users/harshgoyal/Documents/BTP/BTP/edge_research/stage5_cic2018_training/tables)
+
+---
+
+## 9. Variable Features Evaluation
+
+To analyze how feature set size impacts model performance, we conducted an ablation study where models were trained and evaluated on subsets of the top $N$ most important features ($N \in \{10, 20, 30, 40, 50, 60, 70, 82\}$). Feature importance was derived using the pre-trained Random Forest baseline.
+
+* The models were re-trained from scratch for each feature subset while keeping hyperparameters constant.
+* Both Multiclass (4-class) and Binary (Benign vs. Attack) metrics were evaluated for within-dataset (CICIDS-2018) and cross-dataset (CICIDS-2017) scenarios.
+* **Observation:** Tree-based models (XGBoost, Random Forest, LightGBM) maintain high performance even when restricted to the top 20-30 features, suggesting significant feature redundancy in the full 82-feature vector.
+* **Figures & Tables:** The resulting performance line charts and the raw results CSV are available in [figures/variable_features/](file:///Users/harshgoyal/Documents/BTP/BTP/edge_research/stage5_cic2018_training/figures/variable_features/) and [tables/variable_features/](file:///Users/harshgoyal/Documents/BTP/BTP/edge_research/stage5_cic2018_training/tables/variable_features/).
