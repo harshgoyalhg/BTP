@@ -123,7 +123,18 @@ X_test_18_cross_82 = np.vstack([X_test_18_cross_82, X_ps_val_82])
 y_test_18_cross = np.concatenate([y_val_18, y_ps_val])
 
 logger.info(f"Train Shape: {X_train_82.shape}")
-logger.info(f"Cross-Dataset Test Shape: {X_test_18_cross_82.shape}")
+logger.info(f"Cross-Dataset Test Shape (CICIDS-2018): {X_test_18_cross_82.shape}")
+
+logger.info("Loading LycoS Data (Cross-Dataset)...")
+data_lycos = np.load(os.path.join(STAGE5_ARTIFACT_DIR, "lycos_processed.npz"), allow_pickle=True)
+X_lycos_s5 = data_lycos['X_test'].astype(np.float32)
+y_test_lycos = data_lycos['y_test'].astype(np.int64)
+
+X_lycos_raw = scaler_2018.inverse_transform(X_lycos_s5)
+X_lycos_scaled = scaler_2017.transform(X_lycos_raw).astype(np.float32)
+X_test_lycos_cross_82 = apply_feature_engineering_2017(X_lycos_scaled, raw_provided=X_lycos_raw)
+
+logger.info(f"Cross-Dataset Test Shape (LycoS): {X_test_lycos_cross_82.shape}")
 
 # 3. Determine Feature Importance
 rf_model_path = os.path.join(MODEL_DIR, "random_forest.pkl")
@@ -175,6 +186,7 @@ for N in feature_counts:
     X_train_subset = X_train_82[:, selected_features]
     X_val_subset = X_val_82[:, selected_features]
     X_cross_subset = X_test_18_cross_82[:, selected_features]
+    X_lycos_subset = X_test_lycos_cross_82[:, selected_features]
     
     models = {
         "Logistic Regression": LogisticRegression(max_iter=1000, random_state=42, C=1.0),
@@ -212,6 +224,7 @@ for N in feature_counts:
         # Evaluate
         mc_acc_17, mc_f1_17, bin_acc_17, bin_f1_17 = evaluate_metrics(model, X_val_subset, y_val, is_pytorch=is_pt, device=device)
         mc_acc_18, mc_f1_18, bin_acc_18, bin_f1_18 = evaluate_metrics(model, X_cross_subset, y_test_18_cross, is_pytorch=is_pt, device=device)
+        mc_acc_lycos, mc_f1_lycos, bin_acc_lycos, bin_f1_lycos = evaluate_metrics(model, X_lycos_subset, y_test_lycos, is_pytorch=is_pt, device=device)
         
         results.append({
             "Num_Features": N,
@@ -248,6 +261,24 @@ for N in feature_counts:
             "Evaluation_Type": "Binary",
             "Accuracy": round(bin_acc_18, 4),
             "F1_Score": round(bin_f1_18, 4)
+        })
+        results.append({
+            "Num_Features": N,
+            "Model": model_name,
+            "Train_Time_s": round(train_time, 2),
+            "Dataset": "LycoS-2018 (Cross)",
+            "Evaluation_Type": "Multiclass",
+            "Accuracy": round(mc_acc_lycos, 4),
+            "F1_Score": round(mc_f1_lycos, 4)
+        })
+        results.append({
+            "Num_Features": N,
+            "Model": model_name,
+            "Train_Time_s": round(train_time, 2),
+            "Dataset": "LycoS-2018 (Cross)",
+            "Evaluation_Type": "Binary",
+            "Accuracy": round(bin_acc_lycos, 4),
+            "F1_Score": round(bin_f1_lycos, 4)
         })
 
 df = pd.DataFrame(results)

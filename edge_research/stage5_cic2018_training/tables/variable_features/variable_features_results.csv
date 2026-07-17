@@ -1,193 +1,289 @@
 Num_Features,Model,Train_Time_s,Dataset,Evaluation_Type,Accuracy,F1_Score
-10,Logistic Regression,18.89,CICIDS-2018 (Within),Multiclass,0.8099,0.7917
-10,Logistic Regression,18.89,CICIDS-2018 (Within),Binary,0.9254,0.9603
-10,Logistic Regression,18.89,CICIDS-2017 (Cross),Multiclass,0.3468,0.3887
-10,Logistic Regression,18.89,CICIDS-2017 (Cross),Binary,0.3758,0.4362
-10,Random Forest,5.34,CICIDS-2018 (Within),Multiclass,0.949,0.9491
-10,Random Forest,5.34,CICIDS-2018 (Within),Binary,0.9778,0.9879
-10,Random Forest,5.34,CICIDS-2017 (Cross),Multiclass,0.3661,0.3204
-10,Random Forest,5.34,CICIDS-2017 (Cross),Binary,0.5497,0.6453
-10,Extra Trees,1.31,CICIDS-2018 (Within),Multiclass,0.9157,0.9134
-10,Extra Trees,1.31,CICIDS-2018 (Within),Binary,0.9668,0.9821
-10,Extra Trees,1.31,CICIDS-2017 (Cross),Multiclass,0.7228,0.7169
-10,Extra Trees,1.31,CICIDS-2017 (Cross),Binary,0.7234,0.6752
-10,XGBoost,3.69,CICIDS-2018 (Within),Multiclass,0.9477,0.9478
-10,XGBoost,3.69,CICIDS-2018 (Within),Binary,0.9768,0.9874
-10,XGBoost,3.69,CICIDS-2017 (Cross),Multiclass,0.3244,0.2606
-10,XGBoost,3.69,CICIDS-2017 (Cross),Binary,0.5056,0.6234
-10,LightGBM,3.6,CICIDS-2018 (Within),Multiclass,0.9495,0.9496
-10,LightGBM,3.6,CICIDS-2018 (Within),Binary,0.978,0.988
-10,LightGBM,3.6,CICIDS-2017 (Cross),Multiclass,0.3098,0.2359
-10,LightGBM,3.6,CICIDS-2017 (Cross),Binary,0.4927,0.6171
-10,MLP (PyTorch),34.63,CICIDS-2018 (Within),Multiclass,0.9291,0.9286
-10,MLP (PyTorch),34.63,CICIDS-2018 (Within),Binary,0.9659,0.9815
-10,MLP (PyTorch),34.63,CICIDS-2017 (Cross),Multiclass,0.6674,0.6548
-10,MLP (PyTorch),34.63,CICIDS-2017 (Cross),Binary,0.6962,0.6579
-20,Logistic Regression,19.32,CICIDS-2018 (Within),Multiclass,0.8966,0.8928
-20,Logistic Regression,19.32,CICIDS-2018 (Within),Binary,0.9502,0.9732
-20,Logistic Regression,19.32,CICIDS-2017 (Cross),Multiclass,0.62,0.6127
-20,Logistic Regression,19.32,CICIDS-2017 (Cross),Binary,0.6314,0.6833
-20,Random Forest,4.92,CICIDS-2018 (Within),Multiclass,0.949,0.9492
-20,Random Forest,4.92,CICIDS-2018 (Within),Binary,0.978,0.988
-20,Random Forest,4.92,CICIDS-2017 (Cross),Multiclass,0.4368,0.4086
-20,Random Forest,4.92,CICIDS-2017 (Cross),Binary,0.6106,0.6725
-20,Extra Trees,1.65,CICIDS-2018 (Within),Multiclass,0.9379,0.9367
-20,Extra Trees,1.65,CICIDS-2018 (Within),Binary,0.9681,0.9828
-20,Extra Trees,1.65,CICIDS-2017 (Cross),Multiclass,0.6778,0.6747
-20,Extra Trees,1.65,CICIDS-2017 (Cross),Binary,0.6785,0.6198
-20,XGBoost,4.8,CICIDS-2018 (Within),Multiclass,0.9487,0.9488
-20,XGBoost,4.8,CICIDS-2018 (Within),Binary,0.9774,0.9877
-20,XGBoost,4.8,CICIDS-2017 (Cross),Multiclass,0.3275,0.265
-20,XGBoost,4.8,CICIDS-2017 (Cross),Binary,0.5088,0.6244
-20,LightGBM,4.5,CICIDS-2018 (Within),Multiclass,0.9504,0.9506
-20,LightGBM,4.5,CICIDS-2018 (Within),Binary,0.9789,0.9885
-20,LightGBM,4.5,CICIDS-2017 (Cross),Multiclass,0.2408,0.1133
-20,LightGBM,4.5,CICIDS-2017 (Cross),Binary,0.4237,0.5866
-20,MLP (PyTorch),33.34,CICIDS-2018 (Within),Multiclass,0.9395,0.9393
-20,MLP (PyTorch),33.34,CICIDS-2018 (Within),Binary,0.9696,0.9835
-20,MLP (PyTorch),33.34,CICIDS-2017 (Cross),Multiclass,0.6915,0.6962
-20,MLP (PyTorch),33.34,CICIDS-2017 (Cross),Binary,0.7631,0.7394
-30,Logistic Regression,20.01,CICIDS-2018 (Within),Multiclass,0.9132,0.9107
-30,Logistic Regression,20.01,CICIDS-2018 (Within),Binary,0.9524,0.9742
-30,Logistic Regression,20.01,CICIDS-2017 (Cross),Multiclass,0.6354,0.6436
-30,Logistic Regression,20.01,CICIDS-2017 (Cross),Binary,0.6454,0.669
-30,Random Forest,5.43,CICIDS-2018 (Within),Multiclass,0.9495,0.9497
-30,Random Forest,5.43,CICIDS-2018 (Within),Binary,0.9783,0.9882
-30,Random Forest,5.43,CICIDS-2017 (Cross),Multiclass,0.4841,0.4605
-30,Random Forest,5.43,CICIDS-2017 (Cross),Binary,0.6544,0.6963
-30,Extra Trees,1.91,CICIDS-2018 (Within),Multiclass,0.9336,0.9327
-30,Extra Trees,1.91,CICIDS-2018 (Within),Binary,0.9696,0.9835
-30,Extra Trees,1.91,CICIDS-2017 (Cross),Multiclass,0.7178,0.7363
-30,Extra Trees,1.91,CICIDS-2017 (Cross),Binary,0.7184,0.6765
-30,XGBoost,6.0,CICIDS-2018 (Within),Multiclass,0.9489,0.9491
-30,XGBoost,6.0,CICIDS-2018 (Within),Binary,0.9776,0.9878
-30,XGBoost,6.0,CICIDS-2017 (Cross),Multiclass,0.3246,0.2595
-30,XGBoost,6.0,CICIDS-2017 (Cross),Binary,0.5058,0.6224
-30,LightGBM,5.53,CICIDS-2018 (Within),Multiclass,0.9507,0.9509
-30,LightGBM,5.53,CICIDS-2018 (Within),Binary,0.9792,0.9887
-30,LightGBM,5.53,CICIDS-2017 (Cross),Multiclass,0.2401,0.112
-30,LightGBM,5.53,CICIDS-2017 (Cross),Binary,0.4231,0.5863
-30,MLP (PyTorch),29.89,CICIDS-2018 (Within),Multiclass,0.9402,0.9402
-30,MLP (PyTorch),29.89,CICIDS-2018 (Within),Binary,0.9701,0.9838
-30,MLP (PyTorch),29.89,CICIDS-2017 (Cross),Multiclass,0.6621,0.6351
-30,MLP (PyTorch),29.89,CICIDS-2017 (Cross),Binary,0.7621,0.7348
-40,Logistic Regression,21.79,CICIDS-2018 (Within),Multiclass,0.9139,0.9115
-40,Logistic Regression,21.79,CICIDS-2018 (Within),Binary,0.9534,0.9748
-40,Logistic Regression,21.79,CICIDS-2017 (Cross),Multiclass,0.6629,0.6773
-40,Logistic Regression,21.79,CICIDS-2017 (Cross),Binary,0.673,0.6924
-40,Random Forest,6.01,CICIDS-2018 (Within),Multiclass,0.9495,0.9498
-40,Random Forest,6.01,CICIDS-2018 (Within),Binary,0.9786,0.9884
-40,Random Forest,6.01,CICIDS-2017 (Cross),Multiclass,0.4913,0.4626
-40,Random Forest,6.01,CICIDS-2017 (Cross),Binary,0.6364,0.6712
-40,Extra Trees,2.21,CICIDS-2018 (Within),Multiclass,0.9342,0.9332
-40,Extra Trees,2.21,CICIDS-2018 (Within),Binary,0.97,0.9838
-40,Extra Trees,2.21,CICIDS-2017 (Cross),Multiclass,0.6836,0.716
-40,Extra Trees,2.21,CICIDS-2017 (Cross),Binary,0.768,0.7651
-40,XGBoost,7.34,CICIDS-2018 (Within),Multiclass,0.949,0.9491
-40,XGBoost,7.34,CICIDS-2018 (Within),Binary,0.9777,0.9879
-40,XGBoost,7.34,CICIDS-2017 (Cross),Multiclass,0.3256,0.2611
-40,XGBoost,7.34,CICIDS-2017 (Cross),Binary,0.5069,0.6229
-40,LightGBM,6.94,CICIDS-2018 (Within),Multiclass,0.9512,0.9514
-40,LightGBM,6.94,CICIDS-2018 (Within),Binary,0.9797,0.9889
-40,LightGBM,6.94,CICIDS-2017 (Cross),Multiclass,0.2344,0.1006
-40,LightGBM,6.94,CICIDS-2017 (Cross),Binary,0.4166,0.5833
-40,MLP (PyTorch),31.02,CICIDS-2018 (Within),Multiclass,0.9393,0.9392
-40,MLP (PyTorch),31.02,CICIDS-2018 (Within),Binary,0.9694,0.9834
-40,MLP (PyTorch),31.02,CICIDS-2017 (Cross),Multiclass,0.6779,0.6672
-40,MLP (PyTorch),31.02,CICIDS-2017 (Cross),Binary,0.7595,0.7307
-50,Logistic Regression,21.74,CICIDS-2018 (Within),Multiclass,0.9269,0.9255
-50,Logistic Regression,21.74,CICIDS-2018 (Within),Binary,0.9623,0.9796
-50,Logistic Regression,21.74,CICIDS-2017 (Cross),Multiclass,0.6564,0.6744
-50,Logistic Regression,21.74,CICIDS-2017 (Cross),Binary,0.6577,0.6884
-50,Random Forest,7.08,CICIDS-2018 (Within),Multiclass,0.9499,0.9502
-50,Random Forest,7.08,CICIDS-2018 (Within),Binary,0.9787,0.9884
-50,Random Forest,7.08,CICIDS-2017 (Cross),Multiclass,0.4469,0.4147
-50,Random Forest,7.08,CICIDS-2017 (Cross),Binary,0.5941,0.6478
-50,Extra Trees,2.7,CICIDS-2018 (Within),Multiclass,0.9389,0.9386
-50,Extra Trees,2.7,CICIDS-2018 (Within),Binary,0.9704,0.9839
-50,Extra Trees,2.7,CICIDS-2017 (Cross),Multiclass,0.6685,0.6864
-50,Extra Trees,2.7,CICIDS-2017 (Cross),Binary,0.7512,0.7482
-50,XGBoost,8.65,CICIDS-2018 (Within),Multiclass,0.9489,0.949
-50,XGBoost,8.65,CICIDS-2018 (Within),Binary,0.9776,0.9878
-50,XGBoost,8.65,CICIDS-2017 (Cross),Multiclass,0.3244,0.2601
-50,XGBoost,8.65,CICIDS-2017 (Cross),Binary,0.5056,0.623
-50,LightGBM,8.64,CICIDS-2018 (Within),Multiclass,0.9513,0.9515
-50,LightGBM,8.64,CICIDS-2018 (Within),Binary,0.9798,0.989
-50,LightGBM,8.64,CICIDS-2017 (Cross),Multiclass,0.2408,0.1135
-50,LightGBM,8.64,CICIDS-2017 (Cross),Binary,0.4152,0.578
-50,MLP (PyTorch),31.16,CICIDS-2018 (Within),Multiclass,0.9403,0.9404
-50,MLP (PyTorch),31.16,CICIDS-2018 (Within),Binary,0.9707,0.9841
-50,MLP (PyTorch),31.16,CICIDS-2017 (Cross),Multiclass,0.5919,0.582
-50,MLP (PyTorch),31.16,CICIDS-2017 (Cross),Binary,0.6982,0.6974
-60,Logistic Regression,22.76,CICIDS-2018 (Within),Multiclass,0.9277,0.9267
-60,Logistic Regression,22.76,CICIDS-2018 (Within),Binary,0.9646,0.9808
-60,Logistic Regression,22.76,CICIDS-2017 (Cross),Multiclass,0.6873,0.7109
-60,Logistic Regression,22.76,CICIDS-2017 (Cross),Binary,0.6885,0.7076
-60,Random Forest,8.09,CICIDS-2018 (Within),Multiclass,0.9511,0.9514
-60,Random Forest,8.09,CICIDS-2018 (Within),Binary,0.9802,0.9892
-60,Random Forest,8.09,CICIDS-2017 (Cross),Multiclass,0.4322,0.3954
-60,Random Forest,8.09,CICIDS-2017 (Cross),Binary,0.5703,0.6288
-60,Extra Trees,3.2,CICIDS-2018 (Within),Multiclass,0.935,0.9349
-60,Extra Trees,3.2,CICIDS-2018 (Within),Binary,0.9729,0.9853
-60,Extra Trees,3.2,CICIDS-2017 (Cross),Multiclass,0.6576,0.6448
-60,Extra Trees,3.2,CICIDS-2017 (Cross),Binary,0.7574,0.7417
-60,XGBoost,9.69,CICIDS-2018 (Within),Multiclass,0.9519,0.9521
-60,XGBoost,9.69,CICIDS-2018 (Within),Binary,0.9806,0.9894
-60,XGBoost,9.69,CICIDS-2017 (Cross),Multiclass,0.3227,0.2567
-60,XGBoost,9.69,CICIDS-2017 (Cross),Binary,0.5039,0.6215
-60,LightGBM,9.84,CICIDS-2018 (Within),Multiclass,0.9533,0.9536
-60,LightGBM,9.84,CICIDS-2018 (Within),Binary,0.9818,0.9901
-60,LightGBM,9.84,CICIDS-2017 (Cross),Multiclass,0.2832,0.1903
-60,LightGBM,9.84,CICIDS-2017 (Cross),Binary,0.4512,0.5895
-60,MLP (PyTorch),31.18,CICIDS-2018 (Within),Multiclass,0.9442,0.9444
-60,MLP (PyTorch),31.18,CICIDS-2018 (Within),Binary,0.9733,0.9855
-60,MLP (PyTorch),31.18,CICIDS-2017 (Cross),Multiclass,0.7108,0.6986
-60,MLP (PyTorch),31.18,CICIDS-2017 (Cross),Binary,0.7808,0.743
-70,Logistic Regression,24.09,CICIDS-2018 (Within),Multiclass,0.929,0.9278
-70,Logistic Regression,24.09,CICIDS-2018 (Within),Binary,0.9632,0.9801
-70,Logistic Regression,24.09,CICIDS-2017 (Cross),Multiclass,0.6013,0.5891
-70,Logistic Regression,24.09,CICIDS-2017 (Cross),Binary,0.6025,0.6716
-70,Random Forest,9.27,CICIDS-2018 (Within),Multiclass,0.951,0.9513
-70,Random Forest,9.27,CICIDS-2018 (Within),Binary,0.9801,0.9891
-70,Random Forest,9.27,CICIDS-2017 (Cross),Multiclass,0.4498,0.418
-70,Random Forest,9.27,CICIDS-2017 (Cross),Binary,0.6026,0.6559
-70,Extra Trees,3.7,CICIDS-2018 (Within),Multiclass,0.8927,0.8906
-70,Extra Trees,3.7,CICIDS-2018 (Within),Binary,0.9731,0.9854
-70,Extra Trees,3.7,CICIDS-2017 (Cross),Multiclass,0.6822,0.6896
-70,Extra Trees,3.7,CICIDS-2017 (Cross),Binary,0.7775,0.7723
-70,XGBoost,10.54,CICIDS-2018 (Within),Multiclass,0.952,0.9522
-70,XGBoost,10.54,CICIDS-2018 (Within),Binary,0.9807,0.9895
-70,XGBoost,10.54,CICIDS-2017 (Cross),Multiclass,0.3215,0.255
-70,XGBoost,10.54,CICIDS-2017 (Cross),Binary,0.5028,0.6209
-70,LightGBM,11.8,CICIDS-2018 (Within),Multiclass,0.9533,0.9536
-70,LightGBM,11.8,CICIDS-2018 (Within),Binary,0.9818,0.9901
-70,LightGBM,11.8,CICIDS-2017 (Cross),Multiclass,0.2832,0.1903
-70,LightGBM,11.8,CICIDS-2017 (Cross),Binary,0.4512,0.5895
-70,MLP (PyTorch),31.91,CICIDS-2018 (Within),Multiclass,0.946,0.9463
-70,MLP (PyTorch),31.91,CICIDS-2018 (Within),Binary,0.9751,0.9864
-70,MLP (PyTorch),31.91,CICIDS-2017 (Cross),Multiclass,0.6383,0.6202
-70,MLP (PyTorch),31.91,CICIDS-2017 (Cross),Binary,0.7465,0.7328
-82,Logistic Regression,26.06,CICIDS-2018 (Within),Multiclass,0.9285,0.9272
-82,Logistic Regression,26.06,CICIDS-2018 (Within),Binary,0.9628,0.9799
-82,Logistic Regression,26.06,CICIDS-2017 (Cross),Multiclass,0.5717,0.551
-82,Logistic Regression,26.06,CICIDS-2017 (Cross),Binary,0.5733,0.6511
-82,Random Forest,11.26,CICIDS-2018 (Within),Multiclass,0.9516,0.9519
-82,Random Forest,11.26,CICIDS-2018 (Within),Binary,0.9807,0.9895
-82,Random Forest,11.26,CICIDS-2017 (Cross),Multiclass,0.4326,0.4006
-82,Random Forest,11.26,CICIDS-2017 (Cross),Binary,0.5949,0.6572
-82,Extra Trees,4.54,CICIDS-2018 (Within),Multiclass,0.892,0.8898
-82,Extra Trees,4.54,CICIDS-2018 (Within),Binary,0.9725,0.985
-82,Extra Trees,4.54,CICIDS-2017 (Cross),Multiclass,0.6739,0.6646
-82,Extra Trees,4.54,CICIDS-2017 (Cross),Binary,0.7981,0.7887
-82,XGBoost,12.86,CICIDS-2018 (Within),Multiclass,0.9518,0.9521
-82,XGBoost,12.86,CICIDS-2018 (Within),Binary,0.9805,0.9894
-82,XGBoost,12.86,CICIDS-2017 (Cross),Multiclass,0.3219,0.2557
-82,XGBoost,12.86,CICIDS-2017 (Cross),Binary,0.5032,0.6213
-82,LightGBM,11.31,CICIDS-2018 (Within),Multiclass,0.9536,0.9539
-82,LightGBM,11.31,CICIDS-2018 (Within),Binary,0.9821,0.9903
-82,LightGBM,11.31,CICIDS-2017 (Cross),Multiclass,0.2832,0.1903
-82,LightGBM,11.31,CICIDS-2017 (Cross),Binary,0.4512,0.5895
-82,MLP (PyTorch),33.32,CICIDS-2018 (Within),Multiclass,0.9453,0.9456
-82,MLP (PyTorch),33.32,CICIDS-2018 (Within),Binary,0.9747,0.9862
-82,MLP (PyTorch),33.32,CICIDS-2017 (Cross),Multiclass,0.7275,0.7058
-82,MLP (PyTorch),33.32,CICIDS-2017 (Cross),Binary,0.8427,0.8184
+10,Logistic Regression,18.87,CICIDS-2018 (Within),Multiclass,0.8099,0.7917
+10,Logistic Regression,18.87,CICIDS-2018 (Within),Binary,0.9254,0.9603
+10,Logistic Regression,18.87,CICIDS-2017 (Cross),Multiclass,0.3468,0.3887
+10,Logistic Regression,18.87,CICIDS-2017 (Cross),Binary,0.3758,0.4362
+10,Logistic Regression,18.87,LycoS-2018 (Cross),Multiclass,0.4672,0.3461
+10,Logistic Regression,18.87,LycoS-2018 (Cross),Binary,0.4907,0.6533
+10,Random Forest,5.41,CICIDS-2018 (Within),Multiclass,0.949,0.9491
+10,Random Forest,5.41,CICIDS-2018 (Within),Binary,0.9778,0.9879
+10,Random Forest,5.41,CICIDS-2017 (Cross),Multiclass,0.3661,0.3204
+10,Random Forest,5.41,CICIDS-2017 (Cross),Binary,0.5497,0.6453
+10,Random Forest,5.41,LycoS-2018 (Cross),Multiclass,0.6314,0.6809
+10,Random Forest,5.41,LycoS-2018 (Cross),Binary,0.641,0.7278
+10,Extra Trees,1.28,CICIDS-2018 (Within),Multiclass,0.9157,0.9134
+10,Extra Trees,1.28,CICIDS-2018 (Within),Binary,0.9668,0.9821
+10,Extra Trees,1.28,CICIDS-2017 (Cross),Multiclass,0.7228,0.7169
+10,Extra Trees,1.28,CICIDS-2017 (Cross),Binary,0.7234,0.6752
+10,Extra Trees,1.28,LycoS-2018 (Cross),Multiclass,0.4458,0.3513
+10,Extra Trees,1.28,LycoS-2018 (Cross),Binary,0.493,0.6544
+10,XGBoost,3.88,CICIDS-2018 (Within),Multiclass,0.9477,0.9478
+10,XGBoost,3.88,CICIDS-2018 (Within),Binary,0.9768,0.9874
+10,XGBoost,3.88,CICIDS-2017 (Cross),Multiclass,0.3244,0.2606
+10,XGBoost,3.88,CICIDS-2017 (Cross),Binary,0.5056,0.6234
+10,XGBoost,3.88,LycoS-2018 (Cross),Multiclass,0.3752,0.4809
+10,XGBoost,3.88,LycoS-2018 (Cross),Binary,0.6021,0.7052
+10,LightGBM,3.76,CICIDS-2018 (Within),Multiclass,0.9495,0.9496
+10,LightGBM,3.76,CICIDS-2018 (Within),Binary,0.978,0.988
+10,LightGBM,3.76,CICIDS-2017 (Cross),Multiclass,0.3098,0.2359
+10,LightGBM,3.76,CICIDS-2017 (Cross),Binary,0.4927,0.6171
+10,LightGBM,3.76,LycoS-2018 (Cross),Multiclass,0.5672,0.6278
+10,LightGBM,3.76,LycoS-2018 (Cross),Binary,0.6142,0.7133
+10,MLP (PyTorch),33.4,CICIDS-2018 (Within),Multiclass,0.9319,0.9318
+10,MLP (PyTorch),33.4,CICIDS-2018 (Within),Binary,0.9647,0.9808
+10,MLP (PyTorch),33.4,CICIDS-2017 (Cross),Multiclass,0.6814,0.6769
+10,MLP (PyTorch),33.4,CICIDS-2017 (Cross),Binary,0.6819,0.6274
+10,MLP (PyTorch),33.4,LycoS-2018 (Cross),Multiclass,0.5612,0.6024
+10,MLP (PyTorch),33.4,LycoS-2018 (Cross),Binary,0.5836,0.6857
+20,Logistic Regression,21.76,CICIDS-2018 (Within),Multiclass,0.8966,0.8928
+20,Logistic Regression,21.76,CICIDS-2018 (Within),Binary,0.9502,0.9732
+20,Logistic Regression,21.76,CICIDS-2017 (Cross),Multiclass,0.62,0.6127
+20,Logistic Regression,21.76,CICIDS-2017 (Cross),Binary,0.6314,0.6833
+20,Logistic Regression,21.76,LycoS-2018 (Cross),Multiclass,0.5015,0.4748
+20,Logistic Regression,21.76,LycoS-2018 (Cross),Binary,0.5171,0.6653
+20,Random Forest,5.92,CICIDS-2018 (Within),Multiclass,0.949,0.9492
+20,Random Forest,5.92,CICIDS-2018 (Within),Binary,0.978,0.988
+20,Random Forest,5.92,CICIDS-2017 (Cross),Multiclass,0.4368,0.4086
+20,Random Forest,5.92,CICIDS-2017 (Cross),Binary,0.6106,0.6725
+20,Random Forest,5.92,LycoS-2018 (Cross),Multiclass,0.6411,0.6915
+20,Random Forest,5.92,LycoS-2018 (Cross),Binary,0.6506,0.7331
+20,Extra Trees,1.94,CICIDS-2018 (Within),Multiclass,0.9379,0.9367
+20,Extra Trees,1.94,CICIDS-2018 (Within),Binary,0.9681,0.9828
+20,Extra Trees,1.94,CICIDS-2017 (Cross),Multiclass,0.6778,0.6747
+20,Extra Trees,1.94,CICIDS-2017 (Cross),Binary,0.6785,0.6198
+20,Extra Trees,1.94,LycoS-2018 (Cross),Multiclass,0.4547,0.4481
+20,Extra Trees,1.94,LycoS-2018 (Cross),Binary,0.5019,0.6583
+20,XGBoost,5.97,CICIDS-2018 (Within),Multiclass,0.9487,0.9488
+20,XGBoost,5.97,CICIDS-2018 (Within),Binary,0.9774,0.9877
+20,XGBoost,5.97,CICIDS-2017 (Cross),Multiclass,0.3275,0.265
+20,XGBoost,5.97,CICIDS-2017 (Cross),Binary,0.5088,0.6244
+20,XGBoost,5.97,LycoS-2018 (Cross),Multiclass,0.592,0.6357
+20,XGBoost,5.97,LycoS-2018 (Cross),Binary,0.6063,0.7091
+20,LightGBM,5.52,CICIDS-2018 (Within),Multiclass,0.9504,0.9506
+20,LightGBM,5.52,CICIDS-2018 (Within),Binary,0.9789,0.9885
+20,LightGBM,5.52,CICIDS-2017 (Cross),Multiclass,0.2408,0.1133
+20,LightGBM,5.52,CICIDS-2017 (Cross),Binary,0.4237,0.5866
+20,LightGBM,5.52,LycoS-2018 (Cross),Multiclass,0.5968,0.661
+20,LightGBM,5.52,LycoS-2018 (Cross),Binary,0.6384,0.7264
+20,MLP (PyTorch),34.79,CICIDS-2018 (Within),Multiclass,0.9396,0.9394
+20,MLP (PyTorch),34.79,CICIDS-2018 (Within),Binary,0.969,0.9832
+20,MLP (PyTorch),34.79,CICIDS-2017 (Cross),Multiclass,0.6583,0.6799
+20,MLP (PyTorch),34.79,CICIDS-2017 (Cross),Binary,0.7183,0.7059
+20,MLP (PyTorch),34.79,LycoS-2018 (Cross),Multiclass,0.505,0.5355
+20,MLP (PyTorch),34.79,LycoS-2018 (Cross),Binary,0.5524,0.6819
+30,Logistic Regression,25.05,CICIDS-2018 (Within),Multiclass,0.9132,0.9107
+30,Logistic Regression,25.05,CICIDS-2018 (Within),Binary,0.9524,0.9742
+30,Logistic Regression,25.05,CICIDS-2017 (Cross),Multiclass,0.6354,0.6436
+30,Logistic Regression,25.05,CICIDS-2017 (Cross),Binary,0.6454,0.669
+30,Logistic Regression,25.05,LycoS-2018 (Cross),Multiclass,0.196,0.2455
+30,Logistic Regression,25.05,LycoS-2018 (Cross),Binary,0.6235,0.7182
+30,Random Forest,9.47,CICIDS-2018 (Within),Multiclass,0.9495,0.9497
+30,Random Forest,9.47,CICIDS-2018 (Within),Binary,0.9783,0.9882
+30,Random Forest,9.47,CICIDS-2017 (Cross),Multiclass,0.4841,0.4605
+30,Random Forest,9.47,CICIDS-2017 (Cross),Binary,0.6544,0.6963
+30,Random Forest,9.47,LycoS-2018 (Cross),Multiclass,0.6634,0.718
+30,Random Forest,9.47,LycoS-2018 (Cross),Binary,0.6729,0.7457
+30,Extra Trees,3.06,CICIDS-2018 (Within),Multiclass,0.9336,0.9327
+30,Extra Trees,3.06,CICIDS-2018 (Within),Binary,0.9696,0.9835
+30,Extra Trees,3.06,CICIDS-2017 (Cross),Multiclass,0.7178,0.7363
+30,Extra Trees,3.06,CICIDS-2017 (Cross),Binary,0.7184,0.6765
+30,Extra Trees,3.06,LycoS-2018 (Cross),Multiclass,0.5528,0.5842
+30,Extra Trees,3.06,LycoS-2018 (Cross),Binary,0.6,0.7058
+30,XGBoost,9.19,CICIDS-2018 (Within),Multiclass,0.9489,0.9491
+30,XGBoost,9.19,CICIDS-2018 (Within),Binary,0.9776,0.9878
+30,XGBoost,9.19,CICIDS-2017 (Cross),Multiclass,0.3246,0.2595
+30,XGBoost,9.19,CICIDS-2017 (Cross),Binary,0.5058,0.6224
+30,XGBoost,9.19,LycoS-2018 (Cross),Multiclass,0.477,0.5567
+30,XGBoost,9.19,LycoS-2018 (Cross),Binary,0.5643,0.6607
+30,LightGBM,8.37,CICIDS-2018 (Within),Multiclass,0.9507,0.9509
+30,LightGBM,8.37,CICIDS-2018 (Within),Binary,0.9792,0.9887
+30,LightGBM,8.37,CICIDS-2017 (Cross),Multiclass,0.2401,0.112
+30,LightGBM,8.37,CICIDS-2017 (Cross),Binary,0.4231,0.5863
+30,LightGBM,8.37,LycoS-2018 (Cross),Multiclass,0.5933,0.6527
+30,LightGBM,8.37,LycoS-2018 (Cross),Binary,0.6178,0.7053
+30,MLP (PyTorch),39.52,CICIDS-2018 (Within),Multiclass,0.9392,0.9394
+30,MLP (PyTorch),39.52,CICIDS-2018 (Within),Binary,0.9693,0.9832
+30,MLP (PyTorch),39.52,CICIDS-2017 (Cross),Multiclass,0.6498,0.6206
+30,MLP (PyTorch),39.52,CICIDS-2017 (Cross),Binary,0.7387,0.7068
+30,MLP (PyTorch),39.52,LycoS-2018 (Cross),Multiclass,0.4361,0.505
+30,MLP (PyTorch),39.52,LycoS-2018 (Cross),Binary,0.4461,0.5116
+40,Logistic Regression,31.14,CICIDS-2018 (Within),Multiclass,0.9139,0.9115
+40,Logistic Regression,31.14,CICIDS-2018 (Within),Binary,0.9534,0.9748
+40,Logistic Regression,31.14,CICIDS-2017 (Cross),Multiclass,0.6629,0.6773
+40,Logistic Regression,31.14,CICIDS-2017 (Cross),Binary,0.673,0.6924
+40,Logistic Regression,31.14,LycoS-2018 (Cross),Multiclass,0.154,0.1902
+40,Logistic Regression,31.14,LycoS-2018 (Cross),Binary,0.5814,0.6963
+40,Random Forest,11.42,CICIDS-2018 (Within),Multiclass,0.9495,0.9498
+40,Random Forest,11.42,CICIDS-2018 (Within),Binary,0.9786,0.9884
+40,Random Forest,11.42,CICIDS-2017 (Cross),Multiclass,0.4913,0.4626
+40,Random Forest,11.42,CICIDS-2017 (Cross),Binary,0.6364,0.6712
+40,Random Forest,11.42,LycoS-2018 (Cross),Multiclass,0.6887,0.7447
+40,Random Forest,11.42,LycoS-2018 (Cross),Binary,0.6984,0.7609
+40,Extra Trees,3.68,CICIDS-2018 (Within),Multiclass,0.9342,0.9332
+40,Extra Trees,3.68,CICIDS-2018 (Within),Binary,0.97,0.9838
+40,Extra Trees,3.68,CICIDS-2017 (Cross),Multiclass,0.6836,0.716
+40,Extra Trees,3.68,CICIDS-2017 (Cross),Binary,0.768,0.7651
+40,Extra Trees,3.68,LycoS-2018 (Cross),Multiclass,0.6177,0.6448
+40,Extra Trees,3.68,LycoS-2018 (Cross),Binary,0.6275,0.7204
+40,XGBoost,10.82,CICIDS-2018 (Within),Multiclass,0.949,0.9491
+40,XGBoost,10.82,CICIDS-2018 (Within),Binary,0.9777,0.9879
+40,XGBoost,10.82,CICIDS-2017 (Cross),Multiclass,0.3256,0.2611
+40,XGBoost,10.82,CICIDS-2017 (Cross),Binary,0.5069,0.6229
+40,XGBoost,10.82,LycoS-2018 (Cross),Multiclass,0.3447,0.4425
+40,XGBoost,10.82,LycoS-2018 (Cross),Binary,0.5747,0.6743
+40,LightGBM,10.15,CICIDS-2018 (Within),Multiclass,0.9512,0.9514
+40,LightGBM,10.15,CICIDS-2018 (Within),Binary,0.9797,0.9889
+40,LightGBM,10.15,CICIDS-2017 (Cross),Multiclass,0.2344,0.1006
+40,LightGBM,10.15,CICIDS-2017 (Cross),Binary,0.4166,0.5833
+40,LightGBM,10.15,LycoS-2018 (Cross),Multiclass,0.6033,0.672
+40,LightGBM,10.15,LycoS-2018 (Cross),Binary,0.6503,0.733
+40,MLP (PyTorch),35.56,CICIDS-2018 (Within),Multiclass,0.9399,0.9398
+40,MLP (PyTorch),35.56,CICIDS-2018 (Within),Binary,0.9698,0.9836
+40,MLP (PyTorch),35.56,CICIDS-2017 (Cross),Multiclass,0.5984,0.585
+40,MLP (PyTorch),35.56,CICIDS-2017 (Cross),Binary,0.6964,0.6883
+40,MLP (PyTorch),35.56,LycoS-2018 (Cross),Multiclass,0.4755,0.493
+40,MLP (PyTorch),35.56,LycoS-2018 (Cross),Binary,0.5279,0.6703
+50,Logistic Regression,22.78,CICIDS-2018 (Within),Multiclass,0.9269,0.9255
+50,Logistic Regression,22.78,CICIDS-2018 (Within),Binary,0.9623,0.9796
+50,Logistic Regression,22.78,CICIDS-2017 (Cross),Multiclass,0.6564,0.6744
+50,Logistic Regression,22.78,CICIDS-2017 (Cross),Binary,0.6577,0.6884
+50,Logistic Regression,22.78,LycoS-2018 (Cross),Multiclass,0.2321,0.2176
+50,Logistic Regression,22.78,LycoS-2018 (Cross),Binary,0.2689,0.1239
+50,Random Forest,12.41,CICIDS-2018 (Within),Multiclass,0.9499,0.9502
+50,Random Forest,12.41,CICIDS-2018 (Within),Binary,0.9787,0.9884
+50,Random Forest,12.41,CICIDS-2017 (Cross),Multiclass,0.4469,0.4147
+50,Random Forest,12.41,CICIDS-2017 (Cross),Binary,0.5941,0.6478
+50,Random Forest,12.41,LycoS-2018 (Cross),Multiclass,0.6862,0.7422
+50,Random Forest,12.41,LycoS-2018 (Cross),Binary,0.6958,0.7593
+50,Extra Trees,4.18,CICIDS-2018 (Within),Multiclass,0.9389,0.9386
+50,Extra Trees,4.18,CICIDS-2018 (Within),Binary,0.9704,0.9839
+50,Extra Trees,4.18,CICIDS-2017 (Cross),Multiclass,0.6685,0.6864
+50,Extra Trees,4.18,CICIDS-2017 (Cross),Binary,0.7512,0.7482
+50,Extra Trees,4.18,LycoS-2018 (Cross),Multiclass,0.5879,0.6218
+50,Extra Trees,4.18,LycoS-2018 (Cross),Binary,0.6016,0.7064
+50,XGBoost,9.57,CICIDS-2018 (Within),Multiclass,0.9489,0.949
+50,XGBoost,9.57,CICIDS-2018 (Within),Binary,0.9776,0.9878
+50,XGBoost,9.57,CICIDS-2017 (Cross),Multiclass,0.3244,0.2601
+50,XGBoost,9.57,CICIDS-2017 (Cross),Binary,0.5056,0.623
+50,XGBoost,9.57,LycoS-2018 (Cross),Multiclass,0.3345,0.4295
+50,XGBoost,9.57,LycoS-2018 (Cross),Binary,0.5631,0.6681
+50,LightGBM,10.09,CICIDS-2018 (Within),Multiclass,0.9513,0.9515
+50,LightGBM,10.09,CICIDS-2018 (Within),Binary,0.9798,0.989
+50,LightGBM,10.09,CICIDS-2017 (Cross),Multiclass,0.2408,0.1135
+50,LightGBM,10.09,CICIDS-2017 (Cross),Binary,0.4152,0.578
+50,LightGBM,10.09,LycoS-2018 (Cross),Multiclass,0.5853,0.6496
+50,LightGBM,10.09,LycoS-2018 (Cross),Binary,0.6292,0.72
+50,MLP (PyTorch),31.06,CICIDS-2018 (Within),Multiclass,0.9404,0.9404
+50,MLP (PyTorch),31.06,CICIDS-2018 (Within),Binary,0.9705,0.984
+50,MLP (PyTorch),31.06,CICIDS-2017 (Cross),Multiclass,0.6557,0.6535
+50,MLP (PyTorch),31.06,CICIDS-2017 (Cross),Binary,0.7708,0.7595
+50,MLP (PyTorch),31.06,LycoS-2018 (Cross),Multiclass,0.2832,0.2303
+50,MLP (PyTorch),31.06,LycoS-2018 (Cross),Binary,0.3051,0.1206
+60,Logistic Regression,24.35,CICIDS-2018 (Within),Multiclass,0.9277,0.9267
+60,Logistic Regression,24.35,CICIDS-2018 (Within),Binary,0.9646,0.9808
+60,Logistic Regression,24.35,CICIDS-2017 (Cross),Multiclass,0.6873,0.7109
+60,Logistic Regression,24.35,CICIDS-2017 (Cross),Binary,0.6885,0.7076
+60,Logistic Regression,24.35,LycoS-2018 (Cross),Multiclass,0.0424,0.0529
+60,Logistic Regression,24.35,LycoS-2018 (Cross),Binary,0.4941,0.6544
+60,Random Forest,12.04,CICIDS-2018 (Within),Multiclass,0.9511,0.9514
+60,Random Forest,12.04,CICIDS-2018 (Within),Binary,0.9802,0.9892
+60,Random Forest,12.04,CICIDS-2017 (Cross),Multiclass,0.4322,0.3954
+60,Random Forest,12.04,CICIDS-2017 (Cross),Binary,0.5703,0.6288
+60,Random Forest,12.04,LycoS-2018 (Cross),Multiclass,0.6944,0.7505
+60,Random Forest,12.04,LycoS-2018 (Cross),Binary,0.7041,0.7643
+60,Extra Trees,4.34,CICIDS-2018 (Within),Multiclass,0.935,0.9349
+60,Extra Trees,4.34,CICIDS-2018 (Within),Binary,0.9729,0.9853
+60,Extra Trees,4.34,CICIDS-2017 (Cross),Multiclass,0.6576,0.6448
+60,Extra Trees,4.34,CICIDS-2017 (Cross),Binary,0.7574,0.7417
+60,Extra Trees,4.34,LycoS-2018 (Cross),Multiclass,0.6214,0.663
+60,Extra Trees,4.34,LycoS-2018 (Cross),Binary,0.6351,0.7244
+60,XGBoost,10.97,CICIDS-2018 (Within),Multiclass,0.9519,0.9521
+60,XGBoost,10.97,CICIDS-2018 (Within),Binary,0.9806,0.9894
+60,XGBoost,10.97,CICIDS-2017 (Cross),Multiclass,0.3227,0.2567
+60,XGBoost,10.97,CICIDS-2017 (Cross),Binary,0.5039,0.6215
+60,XGBoost,10.97,LycoS-2018 (Cross),Multiclass,0.365,0.4404
+60,XGBoost,10.97,LycoS-2018 (Cross),Binary,0.4848,0.5709
+60,LightGBM,11.11,CICIDS-2018 (Within),Multiclass,0.9533,0.9536
+60,LightGBM,11.11,CICIDS-2018 (Within),Binary,0.9818,0.9901
+60,LightGBM,11.11,CICIDS-2017 (Cross),Multiclass,0.2832,0.1903
+60,LightGBM,11.11,CICIDS-2017 (Cross),Binary,0.4512,0.5895
+60,LightGBM,11.11,LycoS-2018 (Cross),Multiclass,0.5918,0.6584
+60,LightGBM,11.11,LycoS-2018 (Cross),Binary,0.6388,0.7266
+60,MLP (PyTorch),31.14,CICIDS-2018 (Within),Multiclass,0.9453,0.9456
+60,MLP (PyTorch),31.14,CICIDS-2018 (Within),Binary,0.9747,0.9862
+60,MLP (PyTorch),31.14,CICIDS-2017 (Cross),Multiclass,0.706,0.6705
+60,MLP (PyTorch),31.14,CICIDS-2017 (Cross),Binary,0.817,0.7875
+60,MLP (PyTorch),31.14,LycoS-2018 (Cross),Multiclass,0.2758,0.3239
+60,MLP (PyTorch),31.14,LycoS-2018 (Cross),Binary,0.7045,0.7645
+70,Logistic Regression,25.23,CICIDS-2018 (Within),Multiclass,0.929,0.9278
+70,Logistic Regression,25.23,CICIDS-2018 (Within),Binary,0.9632,0.9801
+70,Logistic Regression,25.23,CICIDS-2017 (Cross),Multiclass,0.6013,0.5891
+70,Logistic Regression,25.23,CICIDS-2017 (Cross),Binary,0.6025,0.6716
+70,Logistic Regression,25.23,LycoS-2018 (Cross),Multiclass,0.2852,0.2538
+70,Logistic Regression,25.23,LycoS-2018 (Cross),Binary,0.3101,0.1026
+70,Random Forest,13.04,CICIDS-2018 (Within),Multiclass,0.951,0.9513
+70,Random Forest,13.04,CICIDS-2018 (Within),Binary,0.9801,0.9891
+70,Random Forest,13.04,CICIDS-2017 (Cross),Multiclass,0.4498,0.418
+70,Random Forest,13.04,CICIDS-2017 (Cross),Binary,0.6026,0.6559
+70,Random Forest,13.04,LycoS-2018 (Cross),Multiclass,0.7247,0.7804
+70,Random Forest,13.04,LycoS-2018 (Cross),Binary,0.735,0.7836
+70,Extra Trees,4.9,CICIDS-2018 (Within),Multiclass,0.8927,0.8906
+70,Extra Trees,4.9,CICIDS-2018 (Within),Binary,0.9731,0.9854
+70,Extra Trees,4.9,CICIDS-2017 (Cross),Multiclass,0.6822,0.6896
+70,Extra Trees,4.9,CICIDS-2017 (Cross),Binary,0.7775,0.7723
+70,Extra Trees,4.9,LycoS-2018 (Cross),Multiclass,0.628,0.6917
+70,Extra Trees,4.9,LycoS-2018 (Cross),Binary,0.6796,0.7494
+70,XGBoost,12.49,CICIDS-2018 (Within),Multiclass,0.952,0.9522
+70,XGBoost,12.49,CICIDS-2018 (Within),Binary,0.9807,0.9895
+70,XGBoost,12.49,CICIDS-2017 (Cross),Multiclass,0.3215,0.255
+70,XGBoost,12.49,CICIDS-2017 (Cross),Binary,0.5028,0.6209
+70,XGBoost,12.49,LycoS-2018 (Cross),Multiclass,0.3365,0.42
+70,XGBoost,12.49,LycoS-2018 (Cross),Binary,0.5368,0.6267
+70,LightGBM,14.72,CICIDS-2018 (Within),Multiclass,0.9533,0.9536
+70,LightGBM,14.72,CICIDS-2018 (Within),Binary,0.9818,0.9901
+70,LightGBM,14.72,CICIDS-2017 (Cross),Multiclass,0.2832,0.1903
+70,LightGBM,14.72,CICIDS-2017 (Cross),Binary,0.4512,0.5895
+70,LightGBM,14.72,LycoS-2018 (Cross),Multiclass,0.5813,0.6451
+70,LightGBM,14.72,LycoS-2018 (Cross),Binary,0.6277,0.7205
+70,MLP (PyTorch),32.72,CICIDS-2018 (Within),Multiclass,0.9449,0.9452
+70,MLP (PyTorch),32.72,CICIDS-2018 (Within),Binary,0.9746,0.9861
+70,MLP (PyTorch),32.72,CICIDS-2017 (Cross),Multiclass,0.7318,0.7236
+70,MLP (PyTorch),32.72,CICIDS-2017 (Cross),Binary,0.8506,0.8332
+70,MLP (PyTorch),32.72,LycoS-2018 (Cross),Multiclass,0.2227,0.2994
+70,MLP (PyTorch),32.72,LycoS-2018 (Cross),Binary,0.6533,0.7287
+82,Logistic Regression,28.21,CICIDS-2018 (Within),Multiclass,0.9285,0.9272
+82,Logistic Regression,28.21,CICIDS-2018 (Within),Binary,0.9628,0.9799
+82,Logistic Regression,28.21,CICIDS-2017 (Cross),Multiclass,0.5717,0.551
+82,Logistic Regression,28.21,CICIDS-2017 (Cross),Binary,0.5733,0.6511
+82,Logistic Regression,28.21,LycoS-2018 (Cross),Multiclass,0.2883,0.2558
+82,Logistic Regression,28.21,LycoS-2018 (Cross),Binary,0.3133,0.103
+82,Random Forest,12.81,CICIDS-2018 (Within),Multiclass,0.9516,0.9519
+82,Random Forest,12.81,CICIDS-2018 (Within),Binary,0.9807,0.9895
+82,Random Forest,12.81,CICIDS-2017 (Cross),Multiclass,0.4326,0.4006
+82,Random Forest,12.81,CICIDS-2017 (Cross),Binary,0.5949,0.6572
+82,Random Forest,12.81,LycoS-2018 (Cross),Multiclass,0.7394,0.794
+82,Random Forest,12.81,LycoS-2018 (Cross),Binary,0.7501,0.7934
+82,Extra Trees,5.3,CICIDS-2018 (Within),Multiclass,0.892,0.8898
+82,Extra Trees,5.3,CICIDS-2018 (Within),Binary,0.9725,0.985
+82,Extra Trees,5.3,CICIDS-2017 (Cross),Multiclass,0.6739,0.6646
+82,Extra Trees,5.3,CICIDS-2017 (Cross),Binary,0.7981,0.7887
+82,Extra Trees,5.3,LycoS-2018 (Cross),Multiclass,0.5054,0.5582
+82,Extra Trees,5.3,LycoS-2018 (Cross),Binary,0.5195,0.5651
+82,XGBoost,13.55,CICIDS-2018 (Within),Multiclass,0.9518,0.9521
+82,XGBoost,13.55,CICIDS-2018 (Within),Binary,0.9805,0.9894
+82,XGBoost,13.55,CICIDS-2017 (Cross),Multiclass,0.3219,0.2557
+82,XGBoost,13.55,CICIDS-2017 (Cross),Binary,0.5032,0.6213
+82,XGBoost,13.55,LycoS-2018 (Cross),Multiclass,0.3459,0.4229
+82,XGBoost,13.55,LycoS-2018 (Cross),Binary,0.499,0.5873
+82,LightGBM,11.87,CICIDS-2018 (Within),Multiclass,0.9536,0.9539
+82,LightGBM,11.87,CICIDS-2018 (Within),Binary,0.9821,0.9903
+82,LightGBM,11.87,CICIDS-2017 (Cross),Multiclass,0.2832,0.1903
+82,LightGBM,11.87,CICIDS-2017 (Cross),Binary,0.4512,0.5895
+82,LightGBM,11.87,LycoS-2018 (Cross),Multiclass,0.6203,0.6681
+82,LightGBM,11.87,LycoS-2018 (Cross),Binary,0.6299,0.7217
+82,MLP (PyTorch),32.8,CICIDS-2018 (Within),Multiclass,0.9452,0.9456
+82,MLP (PyTorch),32.8,CICIDS-2018 (Within),Binary,0.9743,0.986
+82,MLP (PyTorch),32.8,CICIDS-2017 (Cross),Multiclass,0.6892,0.661
+82,MLP (PyTorch),32.8,CICIDS-2017 (Cross),Binary,0.7902,0.7614
+82,MLP (PyTorch),32.8,LycoS-2018 (Cross),Multiclass,0.3549,0.328
+82,MLP (PyTorch),32.8,LycoS-2018 (Cross),Binary,0.3697,0.1962
